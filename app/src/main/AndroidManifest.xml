@@ -10,8 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".KimAddAssessmentActivity"
+            android:label="@string/title_activity_kim_add_assessment"></activity>
+        <activity
+            android:name=".KimAddCourseActivity"
+            android:label="@string/title_activity_kim_add_course" />
+        <activity
             android:name=".KimMyAssessmentsActivity"
-            android:label="@string/title_activity_kim_my_assessments"></activity>
+            android:label="@string/title_activity_kim_my_assessments" />
         <activity
             android:name=".KimMyCoursesActivity"
             android:label="@string/title_activity_kim_my_courses" />

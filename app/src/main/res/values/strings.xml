@@ -5,4 +5,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_kim_my_courses">My Courses</string>
     <string name="title_activity_kim_my_assessments">My Assessments</string>
+    <string name="title_activity_kim_add_course">Add Course</string>
+    <string name="title_activity_kim_add_assessment">KimAddAssessmentActivity</string>
 </resources>
