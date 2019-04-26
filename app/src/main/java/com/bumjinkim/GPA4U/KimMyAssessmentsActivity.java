@@ -14,14 +14,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.mukesh.tinydb.TinyDB;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class KimMyAssessmentsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private KimMyAssessmentAdapter kimMyAssessmentAdapter;
 
-    private String[] names = new String[]{"UIMA", "Intro to Psychology", "Abnormal Psychology"};
-    private String[] grades = new String[]{"A", "A", "A"};
+    private int kim_add_assessment_request_code = 2;
+
+    private ArrayList<Object> assessments = new ArrayList<>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -41,7 +47,7 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_kim_my_assessments);
@@ -55,7 +61,8 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(KimMyAssessmentsActivity.this, KimAddAssessmentActivity.class);
-                startActivity(myIntent);
+                myIntent.putExtra("course", getIntent().getExtras().getString("course"));
+                startActivityForResult(myIntent, kim_add_assessment_request_code);
             }
         });
 
@@ -65,7 +72,16 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        kimMyAssessmentAdapter = new KimMyAssessmentAdapter(names, grades);
+        TinyDB tinyDB = new TinyDB(this);
+        ArrayList<Object> assessments = tinyDB.getListObject("assessments", Assessment.class);
+
+        for (Object assessment : assessments) {
+            if (((Assessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
+                this.assessments.add(assessment);
+            }
+        }
+
+        kimMyAssessmentAdapter = new KimMyAssessmentAdapter(this, this.assessments);
         recyclerView.setAdapter(kimMyAssessmentAdapter);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -76,5 +92,25 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp(){
         finish();
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == kim_add_assessment_request_code) {
+            if (resultCode == RESULT_OK) {
+                TinyDB tinyDB = new TinyDB(this);
+                ArrayList<Object> assessments = tinyDB.getListObject("assessments", Assessment.class);
+
+                for (Object assessment : assessments) {
+                    if (((Assessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
+                        this.assessments.add(assessment);
+                    }
+                }
+
+                kimMyAssessmentAdapter.updateAdapter(assessments);
+            }
+        }
     }
 }

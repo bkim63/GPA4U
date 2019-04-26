@@ -1,5 +1,6 @@
 package com.bumjinkim.GPA4U;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,14 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessmentAdapter.KimMyAssessmentViewHolder> {
 
-    private String[] names;
-    private String[] grades;
+    private Context context;
+    private ArrayList<Object> assessments;
 
-    public KimMyAssessmentAdapter(String[] names, String[] grades) {
-        this.names = names;
-        this.grades = grades;
+    public KimMyAssessmentAdapter(Context context, ArrayList<Object> assessments) {
+        this.context = context;
+        this.assessments = assessments;
     }
 
     @Override
@@ -25,13 +29,13 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
 
     @Override
     public void onBindViewHolder(@NonNull KimMyAssessmentViewHolder kimMyAssessmentViewHolder, int i) {
-        kimMyAssessmentViewHolder.nameView.setText(names[i]);
-        kimMyAssessmentViewHolder.gradeView.setText(grades[i]);
+        kimMyAssessmentViewHolder.nameView.setText(((Assessment)this.assessments.get(i)).name);
+        kimMyAssessmentViewHolder.gradeView.setText(String.valueOf(((Assessment)this.assessments.get(i)).grade));
     }
 
     @Override
     public int getItemCount() {
-        return names.length;
+        return assessments.size();
     }
 
     public static class KimMyAssessmentViewHolder extends RecyclerView.ViewHolder {
@@ -46,4 +50,9 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
         }
     }
 
+    public void updateAdapter(List<Object> assessments){
+        this.assessments.clear();
+        this.assessments.addAll(assessments);
+        notifyDataSetChanged();
+    }
 }

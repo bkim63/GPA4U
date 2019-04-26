@@ -1,14 +1,20 @@
 package com.bumjinkim.GPA4U;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.mukesh.tinydb.TinyDB;
+
+import java.util.ArrayList;
 
 public class KimAddAssessmentActivity extends AppCompatActivity {
 
@@ -29,9 +35,8 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kim_add_assessment);
 
@@ -52,6 +57,28 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         s.setAdapter(adapter);
+
+        final TextView nameView = findViewById(R.id.kim_add_assessment_name);
+        final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);
+        final CheckBox expectedView = findViewById(R.id.kim_add_assessment_expected);
+        final TextView weightView = findViewById(R.id.kim_add_assessment_weight);
+
+        Button saveButton = findViewById(R.id.kim_add_assessment_save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
+                ArrayList<Object> assessments = tinyDB.getListObject("assessments", Assessment.class);
+
+                Assessment assessment = new Assessment(getIntent().getExtras().getString("course"), String.valueOf(nameView.getText()), expectedView.isChecked(), Double.valueOf(String.valueOf(weightView.getText())), Double.valueOf(String.valueOf(gradeView.getText())));
+                assessments.add(assessment);
+
+                tinyDB.putListObject("assessments", assessments);
+
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
     }
 
     @Override

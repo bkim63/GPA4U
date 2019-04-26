@@ -13,15 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mukesh.tinydb.TinyDB;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
+
 public class KimMyCoursesFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private KimMyCourseAdapter myCourseAdapter;
-
-    private String[] names = new String[]{"UIMA", "Intro to Psychology", "Abnormal Psychology", "Psychology", "Random Class", "Random Class", "Random Class", "Random Class"};
-    private String[] grades = new String[]{"A", "A", "A", "A", "A", "A", "A", "A"};
-    private int[] credits = new int[]{3, 2, 3, 3, 2, 3, 3, 3};
+    private int kim_add_course_request_code = 1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,7 +36,7 @@ public class KimMyCoursesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getActivity(), KimAddCourseActivity.class);
-                getActivity().startActivity(myIntent);
+                getActivity().startActivityForResult(myIntent, kim_add_course_request_code);
             }
         });
 
@@ -42,10 +46,26 @@ public class KimMyCoursesFragment extends Fragment {
         layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), names, grades, credits);
+        TinyDB tinyDB = new TinyDB(getContext());
+        ArrayList<Object> courses = tinyDB.getListObject("courses", Course.class);
+
+        myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), courses);
         recyclerView.setAdapter(myCourseAdapter);
 
         return fragmentKimMyCourses;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == kim_add_course_request_code) {
+            if (resultCode == RESULT_OK) {
+                TinyDB tinyDB = new TinyDB(getContext());
+                ArrayList<Object> courses = tinyDB.getListObject("courses", Course.class);
+
+                myCourseAdapter.updateAdapter(courses);
+            }
+        }
+    }
 }
