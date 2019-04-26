@@ -1,15 +1,18 @@
 package com.bumjinkim.GPA4U;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 
 public class KimMyAssessmentsActivity extends AppCompatActivity {
 
@@ -46,6 +49,15 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        FloatingActionButton fab = findViewById(R.id.kim_add_course_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(KimMyAssessmentsActivity.this, KimAddAssessmentActivity.class);
+                startActivity(myIntent);
+            }
+        });
 
         recyclerView = findViewById(R.id.kim_my_assessment_list_view);
         recyclerView.setHasFixedSize(true);

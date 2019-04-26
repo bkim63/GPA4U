@@ -22,18 +22,18 @@
         app:menu="@menu/navigation" />
 
     <Spinner
-        android:id="@+id/actionbar_filemenu_selectmenu"
+        android:id="@+id/kim_add_course_credits_dropdown"
         android:layout_width="175dp"
         android:layout_height="46dp"
         android:layout_alignParentRight="true"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toStartOf="@+id/kim_add_class_class_name"
-        app:layout_constraintHorizontal_bias="0.363"
+        app:layout_constraintHorizontal_bias="0.318"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,13 +41,13 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="36dp"
         android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/kim_add_class_weight_name"
-        app:layout_constraintTop_toBottomOf="@+id/actionbar_filemenu_selectmenu2" />
+        app:layout_constraintTop_toBottomOf="@+id/kim_add_course_grading_system_dropdown"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Spinner
-        android:id="@+id/actionbar_filemenu_selectmenu2"
+        android:id="@+id/kim_add_course_grading_system_dropdown"
         android:layout_width="380dp"
         android:layout_height="55dp"
         android:layout_alignParentRight="true"
@@ -66,7 +66,7 @@
         android:id="@+id/kim_add_class_class_name"
         android:layout_width="182dp"
         android:layout_height="46dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
@@ -77,30 +77,32 @@
 
     <EditText
         android:id="@+id/kim_add_class_weight_name"
-        android:layout_width="182dp"
+        android:layout_width="177dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="44dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Weight Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <EditText
+        android:id="@+id/kim_add_class_percentage"
+        android:layout_width="172dp"
         android:layout_height="46dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Weight Name"
-        app:layout_constraintEnd_toStartOf="@+id/kim_add_class_percentage"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="315dp" />
-
-    <EditText
-        android:id="@+id/kim_add_class_percentage"
-        android:layout_width="182dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
         android:text="Percentage"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toEndOf="@+id/kim_add_class_weight_name"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
 </android.support.constraint.ConstraintLayout>
