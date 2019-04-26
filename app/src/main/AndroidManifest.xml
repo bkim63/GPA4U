@@ -19,9 +19,6 @@
             android:name=".KimMyAssessmentsActivity"
             android:label="@string/title_activity_kim_my_assessments" />
         <activity
-            android:name=".KimMyCoursesFragment"
-            android:label="@string/title_activity_kim_my_courses" />
-        <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
