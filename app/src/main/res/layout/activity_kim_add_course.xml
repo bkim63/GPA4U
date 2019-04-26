@@ -11,98 +11,170 @@
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
         android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
         android:background="@color/colorPrimary"
+        app:itemIconTint="#FFFFFF"
+        app:itemTextColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:itemTextColor="#FFFFFF"
-        app:itemIconTint="#FFFFFF"
         app:menu="@menu/navigation" />
 
-    <Spinner
-        android:id="@+id/kim_add_course_credits_dropdown"
-        android:layout_width="151dp"
-        android:layout_height="41dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toStartOf="@+id/kim_add_class_class_name"
-        app:layout_constraintHorizontal_bias="0.63"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="36dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@+id/kim_add_course_grading_system_dropdown"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <Spinner
-        android:id="@+id/kim_add_course_grading_system_dropdown"
-        android:layout_width="334dp"
-        android:layout_height="46dp"
-        android:layout_alignParentRight="true"
+        android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:spinnerMode="dropdown"
+        android:paddingBottom="?attr/actionBarSize"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kim_add_class_class_name" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/kim_add_class_class_name"
-        android:layout_width="170dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginRight="28dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Class Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="1">
 
-    <EditText
-        android:id="@+id/kim_add_class_weight_name"
-        android:layout_width="156dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="40dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Weight Name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+            <LinearLayout>
 
-    <EditText
-        android:id="@+id/kim_add_class_percentage"
-        android:layout_width="149dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Percentage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toEndOf="@+id/kim_add_class_weight_name"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+                <Spinner
+                    android:id="@+id/kim_add_course_credits_dropdown"
+                    android:layout_width="151dp"
+                    android:layout_height="41dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintEnd_toStartOf="@+id/kim_add_class_class_name"
+                    app:layout_constraintHorizontal_bias="0.63"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/kim_add_class_class_name"
+                    android:layout_width="170dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="28dp"
+                    android:layout_marginRight="28dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Class Name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/kim_add_course_grading_system_dropdown"
+                android:layout_width="334dp"
+                android:layout_height="46dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="40dp"
+                android:spinnerMode="dropdown"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.466"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/kim_add_class_class_name" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="36dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@+id/kim_add_course_grading_system_dropdown"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <LinearLayout>
+
+                <EditText
+                    android:id="@+id/kim_add_class_weight_name"
+                    android:layout_width="156dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="40dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Weight Name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                <EditText
+                    android:id="@+id/kim_add_class_percentage"
+                    android:layout_width="149dp"
+                    android:layout_height="43dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Percentage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.515"
+                    app:layout_constraintStart_toEndOf="@+id/kim_add_class_weight_name"
+                    app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            </LinearLayout>
+
+            <LinearLayout>
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="112dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="Add Weight"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.052"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/kim_add_class_weight_name" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="150dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="110dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorPrimary"
+                    android:text="Save"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/button2" />
+            </LinearLayout>
+
+        </TableLayout>
+    </ScrollView>
+
 
 </android.support.constraint.ConstraintLayout>
