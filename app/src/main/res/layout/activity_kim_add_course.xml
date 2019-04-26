@@ -23,8 +23,8 @@
 
     <Spinner
         android:id="@+id/kim_add_course_credits_dropdown"
-        android:layout_width="175dp"
-        android:layout_height="46dp"
+        android:layout_width="151dp"
+        android:layout_height="41dp"
         android:layout_alignParentRight="true"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -33,7 +33,7 @@
         android:layout_marginRight="8dp"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toStartOf="@+id/kim_add_class_class_name"
-        app:layout_constraintHorizontal_bias="0.318"
+        app:layout_constraintHorizontal_bias="0.63"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,8 +48,8 @@
 
     <Spinner
         android:id="@+id/kim_add_course_grading_system_dropdown"
-        android:layout_width="380dp"
-        android:layout_height="55dp"
+        android:layout_width="334dp"
+        android:layout_height="46dp"
         android:layout_alignParentRight="true"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -64,11 +64,11 @@
 
     <EditText
         android:id="@+id/kim_add_class_class_name"
-        android:layout_width="182dp"
-        android:layout_height="46dp"
+        android:layout_width="170dp"
+        android:layout_height="40dp"
         android:layout_marginTop="28dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Class Name"
@@ -77,11 +77,11 @@
 
     <EditText
         android:id="@+id/kim_add_class_weight_name"
-        android:layout_width="177dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="44dp"
+        android:layout_width="156dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Weight Name"
@@ -90,18 +90,18 @@
 
     <EditText
         android:id="@+id/kim_add_class_percentage"
-        android:layout_width="172dp"
-        android:layout_height="46dp"
+        android:layout_width="149dp"
+        android:layout_height="43dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Percentage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toEndOf="@+id/kim_add_class_weight_name"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 

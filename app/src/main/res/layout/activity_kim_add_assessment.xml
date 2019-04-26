@@ -23,10 +23,10 @@
 
     <EditText
         android:id="@+id/kim_add_class_class_name2"
-        android:layout_width="172dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="151dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
@@ -40,8 +40,8 @@
 
     <EditText
         android:id="@+id/kim_add_class_class_name3"
-        android:layout_width="344dp"
-        android:layout_height="51dp"
+        android:layout_width="319dp"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
@@ -51,14 +51,13 @@
         android:inputType="textPersonName"
         android:text="95%"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.631"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/kim_add_class_class_name2" />
 
     <EditText
         android:id="@+id/kim_add_class_class_name4"
-        android:layout_width="348dp"
-        android:layout_height="49dp"
+        android:layout_width="320dp"
+        android:layout_height="46dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="28dp"
@@ -74,12 +73,12 @@
 
     <Spinner
         android:id="@+id/kim_add_course_credits_dropdown2"
-        android:layout_width="175dp"
-        android:layout_height="46dp"
+        android:layout_width="163dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -88,8 +87,8 @@
         android:id="@+id/checkBox"
         android:layout_width="199dp"
         android:layout_height="37dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
         android:layout_marginTop="36dp"
         android:text="Are you expecting this grade?"
         app:layout_constraintStart_toStartOf="parent"
