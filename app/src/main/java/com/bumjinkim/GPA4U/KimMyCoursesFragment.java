@@ -16,9 +16,9 @@ public class KimMyCoursesFragment extends Fragment {
     private LinearLayoutManager layoutManager;
     private KimMyCourseAdapter myCourseAdapter;
 
-    private String[] names = new String[]{"UIMA", "Intro to Psychology", "Abnormal Psychology"};
-    private String[] grades = new String[]{"A", "A", "A"};
-    private int[] credits = new int[]{3, 2, 3};
+    private String[] names = new String[]{"UIMA", "Intro to Psychology", "Abnormal Psychology", "Psychology", "Random Class", "Random Class", "Random Class", "Random Class"};
+    private String[] grades = new String[]{"A", "A", "A", "A", "A", "A", "A", "A"};
+    private int[] credits = new int[]{3, 2, 3, 3, 2, 3, 3, 3};
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class KimMyCoursesFragment extends Fragment {
         layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        myCourseAdapter = new KimMyCourseAdapter(names, grades, credits);
+        myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), names, grades, credits);
         recyclerView.setAdapter(myCourseAdapter);
 
         return fragmentKimMyCourses;

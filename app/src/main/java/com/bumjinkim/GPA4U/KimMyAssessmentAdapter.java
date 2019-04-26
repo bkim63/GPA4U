@@ -40,6 +40,9 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
 
         public KimMyAssessmentViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            nameView = itemView.findViewById(R.id.kim_my_assessment_name_view);
+            gradeView = itemView.findViewById(R.id.kim_my_assessment_grade_view);
         }
     }
 
