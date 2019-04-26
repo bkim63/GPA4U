@@ -11,9 +11,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".KimAddAssessmentActivity"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_kim_add_assessment"></activity>
         <activity
             android:name=".KimAddCourseActivity"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_kim_add_course" />
         <activity
             android:name=".KimMyAssessmentsActivity"
