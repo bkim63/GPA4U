@@ -27,6 +27,7 @@ public class KimMyCoursesFragment extends Fragment {
     private KimMyCourseAdapter myCourseAdapter;
     private int kim_add_course_request_code = 1;
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentKimMyCourses = inflater.inflate(R.layout.fragment_kim_my_courses, container, false);
@@ -49,7 +50,7 @@ public class KimMyCoursesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<KimCourse> courses = realm.where(KimCourse.class).findAll();
+        final RealmResults<KimCourse> courses = realm.where(KimCourse.class).findAll();
 
         TextView gpaView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_gpa_view);
         TextView expectedGPAView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_expected_gpa_view);
