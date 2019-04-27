@@ -48,6 +48,38 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        final TextView nameView = findViewById(R.id.kim_add_assessment_name);
+        final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);
+        final CheckBox expectedView = findViewById(R.id.kim_add_assessment_expected);
+        final TextView weightView = findViewById(R.id.kim_add_assessment_weight);
+
+        KimAssessment assessment = null;
+        int index = 0;
+        final String method = getIntent().getExtras().getString("method");
+        final String assessmentId = getIntent().getExtras().getString("assessment");
+
+        if (method.equals("edit")) {
+            setTitle("Edit Assessment");
+
+            TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
+            ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
+            ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
+
+            for (int i = 0; i < assessments.size(); i++) {
+                if (((KimAssessment) assessments.get(i)).id.equals(getIntent().getExtras().get("assessment"))) {
+                    assessment = ((KimAssessment) (assessments.get(i)));
+                    index = i;
+
+                    nameView.setText(assessment.name);
+                    gradeView.setText(String.valueOf(assessment.grade));
+                    expectedView.setSelected(assessment.expected);
+                    weightView.setText(String.valueOf(assessment.assessmentWeight));
+                }
+            }
+        } else {
+            setTitle("Add Assessment");
+        }
+
         TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
         ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
 
@@ -66,11 +98,6 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             s.setAdapter(adapter);
             s.setSelection(0);
-
-            final TextView nameView = findViewById(R.id.kim_add_assessment_name);
-            final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);
-            final CheckBox expectedView = findViewById(R.id.kim_add_assessment_expected);
-            final TextView weightView = findViewById(R.id.kim_add_assessment_weight);
 
             Button saveButton = findViewById(R.id.kim_add_assessment_save_button);
             saveButton.setOnClickListener(new View.OnClickListener() {

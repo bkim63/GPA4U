@@ -58,6 +58,7 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(KimMyAssessmentsActivity.this, KimAddAssessmentActivity.class);
+                myIntent.putExtra("method", "add");
                 myIntent.putExtra("course", getIntent().getExtras().getString("course"));
                 startActivityForResult(myIntent, kim_add_assessment_request_code);
             }
@@ -80,7 +81,7 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
             }
         }
 
-        kimMyAssessmentAdapter = new KimMyAssessmentAdapter(this, this.assessments, recyclerView);
+        kimMyAssessmentAdapter = new KimMyAssessmentAdapter(this, getIntent().getExtras().getString("course"), this.assessments, recyclerView);
         recyclerView.setAdapter(kimMyAssessmentAdapter);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

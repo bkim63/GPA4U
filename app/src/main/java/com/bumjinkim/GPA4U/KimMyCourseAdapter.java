@@ -69,6 +69,7 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
                                 courses.remove(((KimCourse)courses.get(recyclerView.getChildAdapterPosition(v))));
 
                                 tinyDB.putListObject("courses", courses);
+                                notifyDataSetChanged();
 
                                 break;
                             default:

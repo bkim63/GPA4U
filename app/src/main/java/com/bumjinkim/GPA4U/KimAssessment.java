@@ -12,6 +12,7 @@ public class KimAssessment {
     public boolean expected;
     public String weight;
     public Double grade;
+    public Double assessmentWeight;
 
     public KimAssessment(String course, String name, boolean expected, String weight, Double grade) {
         this.id = KimRandomCourseID.randomString(21);
