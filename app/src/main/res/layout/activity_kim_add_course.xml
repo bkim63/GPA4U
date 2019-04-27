@@ -66,9 +66,9 @@
                     android:layout_marginTop="28dp"
                     android:layout_marginEnd="28dp"
                     android:layout_marginRight="28dp"
+                    android:hint="Class Name"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:text="Class Name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

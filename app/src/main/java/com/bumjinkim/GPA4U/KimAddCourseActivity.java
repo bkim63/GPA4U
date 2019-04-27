@@ -97,6 +97,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 textViewParams.setMargins(50, 30, 0, 50);
                 weightNameView.setText(((KimWeight) o).name);
                 weightNameView.setLayoutParams(textViewParams);
+                weightNameView.setHint("Weight Name");
                 weightNameViews.add(weightNameView);
 
                 EditText weightPercentView = new EditText(KimAddCourseActivity.this);
@@ -105,6 +106,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 );
                 textViewParams2.setMargins(0, 30, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
+                weightNameView.setHint("90");
 
                 weightPercentView.setText(String.valueOf(((KimWeight) o).percent));
                 weightPercentViews.add(weightPercentView);
@@ -200,7 +202,8 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 );
                 textViewParams.setMargins(50, 30, 0, 50);
                 weightNameView.setLayoutParams(textViewParams);
-                weightNameView.setText("Weight Name");
+                weightNameView.setHint("Weight Name");
+
                 weightNameViews.add(weightNameView);
 
                 EditText weightPercentView = new EditText(KimAddCourseActivity.this);
@@ -209,7 +212,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 );
                 textViewParams2.setMargins(0, 30, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
-                weightPercentView.setText("90");
+                weightPercentView.setHint("90");
                 weightPercentViews.add(weightPercentView);
 
                 textViewLayout.addView(weightNameView);
