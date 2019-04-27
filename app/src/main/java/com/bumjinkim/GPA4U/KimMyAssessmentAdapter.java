@@ -83,7 +83,7 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
     @Override
     public void onBindViewHolder(@NonNull KimMyAssessmentViewHolder kimMyAssessmentViewHolder, int i) {
         kimMyAssessmentViewHolder.nameView.setText(((KimAssessment)this.assessments.get(i)).name);
-        kimMyAssessmentViewHolder.gradeView.setText(String.valueOf(((KimAssessment)this.assessments.get(i)).grade));
+        kimMyAssessmentViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(((KimAssessment)this.assessments.get(i)).grade));
     }
 
     @Override

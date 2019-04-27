@@ -93,9 +93,9 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
         RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", ((KimCourse) courses.get(i)).id).findAll();
 
         if (((KimCourse) courses.get(i)).su) {
-            courseViewHolder.gradeView.setText(KimCalculateGrade.calculateSUGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false)));
+            courseViewHolder.gradeView.setText(String.format("S/U Grade %s", KimCalculateGrade.calculateSUGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false))));
         } else {
-            courseViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false)));
+            courseViewHolder.gradeView.setText(String.format("Letter Grade %s", KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false))));
         }
         courseViewHolder.creditView.setText(String.valueOf(((KimCourse) courses.get(i)).credit));
     }

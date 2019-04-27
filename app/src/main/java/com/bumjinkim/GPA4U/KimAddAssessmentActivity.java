@@ -59,12 +59,12 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         final TextView weightView = findViewById(R.id.kim_add_assessment_weight);
 
         KimAssessment assessment = null;
-        int index = 0;
+
         final String method = getIntent().getExtras().getString("method");
         final String assessmentId = getIntent().getExtras().getString("assessment");
         final Long courseId = getIntent().getExtras().getLong("course");
 
-        RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
+        final RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
         final RealmResults<KimCourse> courses = realm.where(KimCourse.class).equalTo("id", getIntent().getExtras().getLong("course")).findAll();
 
         if (method.equals("edit")) {
@@ -86,8 +86,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         if (weights.size() != 0) {
             ArrayList<String> spinnerItems = new ArrayList();
             for (KimWeight weight : weights) {
-                courseWeights.add((KimWeight) weight);
-                spinnerItems.add(((KimWeight) weight).name);
+                spinnerItems.add(weight.name);
             }
             final Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -104,9 +103,6 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(KimAddAssessmentActivity.this, "This is my Toast message!",
-                            Toast.LENGTH_LONG).show();
-
                     KimAssessment ast = null;
 
                     if (method.equals("edit")) {
@@ -116,6 +112,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                         finalAssessment.name = String.valueOf(nameView.getText());
                         finalAssessment.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
                         finalAssessment.expected = expectedView.isSelected();
+                        finalAssessment.weight = weights.get(s.getSelectedItemPosition());
 
                         realm.copyToRealmOrUpdate(finalAssessment);
                         realm.commitTransaction();
@@ -138,14 +135,11 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                         ast.grade = Double.valueOf(String.valueOf(gradeView.getText()));
                         ast.course = courses.get(0);
                         ast.name = String.valueOf(nameView.getText());
-                        ast.weight = courseWeights.get(s.getSelectedItemPosition());
+                        ast.weight = weights.get(s.getSelectedItemPosition());
 
                         realm.copyToRealmOrUpdate(ast);
                         realm.commitTransaction();
                     }
-
-                    Toast.makeText(KimAddAssessmentActivity.this, "This is my Toast message!",
-                            Toast.LENGTH_LONG).show();
 
                     setResult(RESULT_OK);
                     finish();
