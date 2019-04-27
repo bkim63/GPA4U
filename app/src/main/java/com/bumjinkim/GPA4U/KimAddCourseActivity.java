@@ -67,16 +67,14 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 KimCourse course = new KimCourse(String.valueOf(nameView.getText()), "No Grade", 3);
                 courses.add(course);
 
-                ArrayList<Object> weightArrayList = new ArrayList<>();
-
                 for (int i = 0; i < weightNameViews.size(); i++) {
                     EditText weightPercentView = weightPercentViews.get(i);
                     KimWeight weight = new KimWeight(String.valueOf(weightNameViews.get(i).getText()), Double.valueOf(String.valueOf(weightPercentView.getText())), course.id);
-                    weightArrayList.add(weight);
+                    weights.add(weight);
                 }
 
                 tinyDB.putListObject("courses", courses);
-                tinyDB.putListObject("weights", weightArrayList);
+                tinyDB.putListObject("weights", weights);
 
                 setResult(RESULT_OK);
                 finish();

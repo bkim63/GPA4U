@@ -53,7 +53,9 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         if (weights.size() != 0) {
             ArrayList<String> spinnerItems = new ArrayList();
             for (Object weight : weights) {
-                spinnerItems.add(((KimWeight) weight).name);
+                if (((KimWeight) weight).course.equals(getIntent().getExtras().getString("course"))) {
+                    spinnerItems.add(((KimWeight) weight).name);
+                }
             }
             Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
