@@ -7,20 +7,40 @@ import java.util.ArrayList;
 public class KimCalculateGrade {
     public static double calculateOverallGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
         double grade = 0.0;
+        double totalCredit = 0.0;
         for (Object course : courses) {
-            grade += calculateGPAFromGrade(calculateCourseGPA(course, assessments, weights, false));
+            totalCredit += ((KimCourse)course).credit;
+        }
+
+        for (Object course : courses) {
+            grade += calculateGPAFromGrade(calculateCourseGPA(course, assessments, weights, false)) * ((KimCourse)course).credit / totalCredit;
             Log.d("GPA", String.valueOf(grade));
         }
 
-        return grade/courses.size();
+        return grade;
+    }
+
+    public static String calculateSUGrade(double grade) {
+        String su = "U";
+        if (grade >=69.5) {
+            su = "S";
+        }
+        return su;
     }
 
     public static double calculateOverallExpectedGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
         double grade = 0.0;
+        double totalCredit = 0.0;
         for (Object course : courses) {
-            grade += calculateGPAFromGrade(calculateCourseGPA(course, assessments, weights, true));
+            totalCredit += ((KimCourse)course).credit;
         }
-        return grade/courses.size();
+
+        for (Object course : courses) {
+            grade += calculateGPAFromGrade(calculateCourseGPA(course, assessments, weights, true)) * ((KimCourse)course).credit / totalCredit;
+            Log.d("GPA", String.valueOf(grade));
+        }
+
+        return grade;
     }
 
     public static double calculateCourseGPA(Object course, ArrayList<Object> assessments, ArrayList<Object> weights, boolean expected) {

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -80,12 +81,13 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     index = i;
 
                     nameView.setText(course.name);
-                    creditView.setSelection(course.credit-1);
+                    creditView.setSelection(course.credit - 1);
+                    gradeSystemView.setSelection(course.su ? 1 : 0);
                 }
             }
 
             for (Object o : weights) {
-                if (((KimWeight)o).course.equals(courseId)) {
+                if (((KimWeight) o).course.equals(courseId)) {
                     LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
                     textViewLayout.setOrientation(HORIZONTAL);
 
@@ -97,7 +99,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                             300, 80
                     );
                     textViewParams.setMargins(50, 30, 0, 50);
-                    weightNameView.setText(((KimWeight)o).name);
+                    weightNameView.setText(((KimWeight) o).name);
                     weightNameView.setLayoutParams(textViewParams);
                     weightNameViews.add(weightNameView);
 
@@ -108,7 +110,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     textViewParams2.setMargins(0, 30, 50, 50);
                     weightPercentView.setLayoutParams(textViewParams2);
 
-                    weightPercentView.setText(String.valueOf(((KimWeight)o).percent));
+                    weightPercentView.setText(String.valueOf(((KimWeight) o).percent));
                     weightPercentViews.add(weightPercentView);
 
                     textViewLayout.addView(weightNameView);
@@ -136,6 +138,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 if (method.equals("edit")) {
                     finalCourse.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
                     finalCourse.name = String.valueOf(nameView.getText());
+                    finalCourse.su = gradeSystemView.getSelectedItemPosition() != 0;
                     courses.set(finalIndex, finalCourse);
                     c = finalCourse;
 
@@ -149,7 +152,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     }
 
                 } else {
-                    c = new KimCourse(String.valueOf(nameView.getText()), "No Grade", Integer.valueOf(String.valueOf(creditView.getSelectedItem())));
+                    c = new KimCourse(String.valueOf(nameView.getText()), "No Grade", Integer.valueOf(String.valueOf(creditView.getSelectedItem())), gradeSystemView.getSelectedItemPosition() != 0);
                     courses.add(c);
                 }
 

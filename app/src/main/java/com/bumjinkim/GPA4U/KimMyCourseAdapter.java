@@ -90,7 +90,11 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder courseViewHolder, int i) {
         courseViewHolder.nameView.setText(((KimCourse)courses.get(i)).name);
-        courseViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), assessments, weights, false)));
+        if (((KimCourse) courses.get(i)).su) {
+            courseViewHolder.gradeView.setText(KimCalculateGrade.calculateSUGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), assessments, weights, false)));
+        } else {
+            courseViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), assessments, weights, false)));
+        }
         courseViewHolder.creditView.setText(String.valueOf(((KimCourse)courses.get(i)).credit));
     }
 
