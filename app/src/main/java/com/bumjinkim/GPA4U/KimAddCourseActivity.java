@@ -93,16 +93,21 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     textViewLayout.setLayoutParams(layoutParams);
 
                     EditText weightNameView = new EditText(KimAddCourseActivity.this);
-                    weightNameView.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
                             300, 80
-                    ));
+                    );
+                    textViewParams.setMargins(50, 30, 0, 50);
                     weightNameView.setText(((KimWeight)o).name);
+                    weightNameView.setLayoutParams(textViewParams);
                     weightNameViews.add(weightNameView);
 
                     EditText weightPercentView = new EditText(KimAddCourseActivity.this);
-                    weightPercentView.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
                             300, 80
-                    ));
+                    );
+                    textViewParams2.setMargins(0, 30, 50, 50);
+                    weightPercentView.setLayoutParams(textViewParams2);
+
                     weightPercentView.setText(String.valueOf(((KimWeight)o).percent));
                     weightPercentViews.add(weightPercentView);
 
@@ -163,16 +168,20 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 textViewLayout.setLayoutParams(layoutParams);
 
                 EditText weightNameView = new EditText(KimAddCourseActivity.this);
-                weightNameView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
                         300, 80
-                ));
+                );
+                textViewParams.setMargins(50, 30, 0, 50);
+                weightNameView.setLayoutParams(textViewParams);
                 weightNameView.setText("Weight Name");
                 weightNameViews.add(weightNameView);
 
                 EditText weightPercentView = new EditText(KimAddCourseActivity.this);
-                weightPercentView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
                         300, 80
-                ));
+                );
+                textViewParams2.setMargins(0, 30, 50, 50);
+                weightPercentView.setLayoutParams(textViewParams2);
                 weightPercentView.setText("90");
                 weightPercentViews.add(weightPercentView);
 

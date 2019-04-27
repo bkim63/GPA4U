@@ -6,19 +6,20 @@ import java.util.ArrayList;
 
 public class KimCalculateGrade {
     public static double calculateOverallGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
-        double gpa = 0.0;
+        double grade = 0.0;
         for (Object course : courses) {
-            gpa += calculateCourseGPA(course, assessments, weights, false);
+            grade += calculateCourseGPA(course, assessments, weights, false);
         }
-        return gpa;
+
+        return calculateGPAFromGrade(grade);
     }
 
     public static double calculateOverallExpectedGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
-        double gpa = 0.0;
+        double grade = 0.0;
         for (Object course : courses) {
-            gpa += calculateCourseGPA(course, assessments, weights, true);
+            grade += calculateCourseGPA(course, assessments, weights, true);
         }
-        return gpa;
+        return calculateGPAFromGrade(grade);
     }
 
     public static double calculateCourseGPA(Object course, ArrayList<Object> assessments, ArrayList<Object> weights, boolean expected) {
@@ -40,10 +41,17 @@ public class KimCalculateGrade {
 
                 for (Object a : assessments) {
                     KimAssessment assessment = (KimAssessment) a;
-                    if (((KimCourse) course).id.equals(assessment.course) && assessment.expected == expected) {
+                    if (((KimCourse) course).id.equals(assessment.course)) {
                         if (weight.id.equals(assessment.weight)) {
-                            percent += assessment.grade;
-                            assessmentCount++;
+                            if (!expected) {
+                                if (!assessment.expected) {
+                                    percent += assessment.grade;
+                                    assessmentCount++;
+                                }
+                            } else {
+                                percent += assessment.grade;
+                                assessmentCount++;
+                            }
                         }
                     }
                 }
@@ -52,7 +60,10 @@ public class KimCalculateGrade {
                     missingWeights.add(weight);
                     missingAssessment = true;
                 }
-                grade += (percent / (assessmentCount * 100)) * weight.percent / 100;
+
+                Log.d("GRADE CALCULATION", String.valueOf(percent));
+
+                grade += (percent / (assessmentCount * 100)) * 100 * weight.percent / 100;
             }
         }
 
@@ -67,6 +78,38 @@ public class KimCalculateGrade {
         Log.d("GRADE CALCULATE", String.valueOf(grade));
 
         return grade;
+    }
+
+    public static Double calculateGPAFromGrade(double grade) {
+        double gpa;
+
+        if (grade <= 100 && grade >= 97.5) {
+            gpa = 4.0;
+        } else if (grade <= 97.5 && grade >= 92.5) {
+            gpa = 4.0;
+        } else if (grade <= 92.5 && grade >= 89.5) {
+            gpa = 3.7;
+        } else if (grade <= 89.5 && grade >= 87.5) {
+            gpa = 3.3;
+        } else if (grade <= 87.5 && grade >= 82.5) {
+            gpa = 3.0;
+        } else if (grade <= 82.5 && grade >= 79.5) {
+            gpa = 2.7;
+        } else if (grade <= 79.5 && grade >= 77.5) {
+            gpa = 2.3;
+        } else if (grade <= 77.5 && grade >= 72.5) {
+            gpa = 2.0;
+        } else if (grade <= 72.5 && grade >= 69.5) {
+            gpa = 1.7;
+        } else if (grade <= 69.5 && grade >= 59.5) {
+            gpa = 1.3;
+        } else if (grade <= 59.5 && grade >= 0) {
+            gpa = 1.0;
+        } else {
+            gpa = 0.0;
+        }
+
+        return gpa;
     }
 
     public static String calculateCourseLetterGrade(double grade) {
