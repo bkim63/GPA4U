@@ -12,10 +12,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.mukesh.tinydb.TinyDB;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class KimAddAssessmentActivity extends AppCompatActivity {
 
@@ -49,6 +51,8 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        final Realm realm = Realm.getDefaultInstance();
+
         final TextView nameView = findViewById(R.id.kim_add_assessment_name);
         final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);
         final CheckBox expectedView = findViewById(R.id.kim_add_assessment_expected);
@@ -58,37 +62,32 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         int index = 0;
         final String method = getIntent().getExtras().getString("method");
         final String assessmentId = getIntent().getExtras().getString("assessment");
+        final Long courseId = getIntent().getExtras().getLong("course");
 
-        TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
-        final ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
-        ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
+        RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
+        final RealmResults<KimCourse> courses = realm.where(KimCourse.class).equalTo("id", getIntent().getExtras().getLong("course")).findAll();
 
         if (method.equals("edit")) {
             setTitle("Edit Assessment");
 
-            for (int i = 0; i < assessments.size(); i++) {
-                Log.d("ASSESSMENTS", String.valueOf(((KimAssessment) assessments.get(i))));
-                if (((KimAssessment) assessments.get(i)).id.equals(getIntent().getExtras().get("assessment"))) {
-                    assessment = ((KimAssessment) (assessments.get(i)));
-                    index = i;
+            final RealmResults<KimAssessment> asts = realm.where(KimAssessment.class).equalTo("id", getIntent().getExtras().getLong("assessment")).findAll();
 
-                    nameView.setText(assessment.name);
-                    gradeView.setText(String.valueOf(assessment.grade));
-                    expectedView.setSelected(assessment.expected);
-                    weightView.setText(String.valueOf(assessment.assessmentWeight));
-                }
-            }
+            assessment = asts.get(0);
+
+            nameView.setText(assessment.name);
+            gradeView.setText(String.valueOf(assessment.grade));
+            expectedView.setSelected(assessment.expected);
+            weightView.setText(String.valueOf(assessment.assessmentWeight));
+
         } else {
             setTitle("Add Assessment");
         }
 
         if (weights.size() != 0) {
             ArrayList<String> spinnerItems = new ArrayList();
-            for (Object weight : weights) {
-                if (((KimWeight) weight).course.equals(getIntent().getExtras().getString("course"))) {
-                    courseWeights.add((KimWeight) weight);
-                    spinnerItems.add(((KimWeight) weight).name);
-                }
+            for (KimWeight weight : weights) {
+                courseWeights.add((KimWeight) weight);
+                spinnerItems.add(((KimWeight) weight).name);
             }
             final Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -99,26 +98,54 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             s.setSelection(0);
 
             Button saveButton = findViewById(R.id.kim_add_assessment_save_button);
+
             final KimAssessment finalAssessment = assessment;
-            final int finalIndex = index;
+
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Toast.makeText(KimAddAssessmentActivity.this, "This is my Toast message!",
+                            Toast.LENGTH_LONG).show();
+
                     KimAssessment ast = null;
+
                     if (method.equals("edit")) {
+                        realm.beginTransaction();
+
                         finalAssessment.grade = Double.valueOf(String.valueOf(gradeView.getText()));
                         finalAssessment.name = String.valueOf(nameView.getText());
                         finalAssessment.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
                         finalAssessment.expected = expectedView.isSelected();
-                        assessments.set(finalIndex, finalAssessment);
-                        ast = finalAssessment;
+
+                        realm.copyToRealmOrUpdate(finalAssessment);
+                        realm.commitTransaction();
                     } else {
-                        ast = new KimAssessment(getIntent().getExtras().getString("course"), String.valueOf(nameView.getText()), expectedView.isChecked(), courseWeights.get(s.getSelectedItemPosition()).id, Double.valueOf(String.valueOf(gradeView.getText())), Double.valueOf(String.valueOf(weightView.getText())));
-                        assessments.add(ast);
+                        realm.beginTransaction();
+
+                        ast = new KimAssessment();
+
+                        Number currentIdNum = realm.where(KimAssessment.class).max("id");
+
+                        long nextId;
+                        if (currentIdNum == null) {
+                            nextId = 1;
+                        } else {
+                            nextId = currentIdNum.intValue() + 1;
+                        }
+                        ast.id = nextId;
+                        ast.expected = expectedView.isChecked();
+                        ast.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
+                        ast.grade = Double.valueOf(String.valueOf(gradeView.getText()));
+                        ast.course = courses.get(0);
+                        ast.name = String.valueOf(nameView.getText());
+                        ast.weight = courseWeights.get(s.getSelectedItemPosition());
+
+                        realm.copyToRealmOrUpdate(ast);
+                        realm.commitTransaction();
                     }
 
-                    TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
-                    tinyDB.putListObject("assessments", assessments);
+                    Toast.makeText(KimAddAssessmentActivity.this, "This is my Toast message!",
+                            Toast.LENGTH_LONG).show();
 
                     setResult(RESULT_OK);
                     finish();

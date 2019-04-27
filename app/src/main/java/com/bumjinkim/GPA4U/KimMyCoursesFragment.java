@@ -13,9 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mukesh.tinydb.TinyDB;
-
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,17 +48,15 @@ public class KimMyCoursesFragment extends Fragment {
         layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        TinyDB tinyDB = new TinyDB(getContext());
-        ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
-        ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
-        ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<KimCourse> courses = realm.where(KimCourse.class).findAll();
 
         TextView gpaView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_gpa_view);
         TextView expectedGPAView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_expected_gpa_view);
-        gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(assessments, weights, courses)));
-        expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(assessments, weights, courses)));
+        gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<KimCourse>(courses))));
+        expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<KimCourse>(courses))));
 
-        myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), courses, assessments, weights, recyclerView);
+        myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), new ArrayList<KimCourse>(courses), recyclerView);
         recyclerView.setAdapter(myCourseAdapter);
 
         return fragmentKimMyCourses;
@@ -69,12 +68,10 @@ public class KimMyCoursesFragment extends Fragment {
 
         if (requestCode == kim_add_course_request_code) {
             if (resultCode == RESULT_OK) {
-                TinyDB tinyDB = new TinyDB(getContext());
-                ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
-                ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
-                ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<KimCourse> courses = realm.where(KimCourse.class).findAll();
 
-                myCourseAdapter.updateAdapter(courses, weights, assessments);
+                myCourseAdapter.updateAdapter(new ArrayList<KimCourse>(courses));
             }
         }
     }

@@ -13,18 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mukesh.tinydb.TinyDB;
-
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessmentAdapter.KimMyAssessmentViewHolder> {
 
-    private final String courseId;
+    private final long courseId;
     private Context context;
-    private ArrayList<Object> assessments;
+    private ArrayList<KimAssessment> assessments;
     private int kim_add_assessment_request_code = 2;
 
-    public KimMyAssessmentAdapter(Context context, String courseId, ArrayList<Object> assessments, RecyclerView recyclerView) {
+    public KimMyAssessmentAdapter(Context context, long courseId, ArrayList<KimAssessment> assessments, RecyclerView recyclerView) {
         this.context = context;
         this.assessments = assessments;
         this.courseId = courseId;
@@ -56,11 +57,13 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
                                 ((AppCompatActivity)context).startActivityForResult(editIntent, kim_add_assessment_request_code);
                                 break;
                             case 1:
-                                TinyDB tinyDB = new TinyDB(context);
-                                ArrayList<Object> asts = tinyDB.getListObject("assessments", KimAssessment.class);
-                                asts.remove(recyclerView.getChildAdapterPosition(v));
-                                tinyDB.putListObject("assessments", asts);
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.beginTransaction();
 
+                                final RealmResults<KimAssessment> results = realm.where(KimAssessment.class).equalTo("id", ((KimAssessment)assessments.get(recyclerView.getChildAdapterPosition(v))).id).findAll();
+                                results.deleteAllFromRealm();
+
+                                realm.commitTransaction();
                                 assessments.remove(recyclerView.getChildAdapterPosition(v));
                                 notifyDataSetChanged();
 
@@ -100,7 +103,7 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
         }
     }
 
-    public void updateAdapter(ArrayList<Object> assessments){
+    public void updateAdapter(ArrayList<KimAssessment> assessments){
         this.assessments = assessments;
         notifyDataSetChanged();
     }

@@ -12,9 +12,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.mukesh.tinydb.TinyDB;
-
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class KimMyAssessmentsActivity extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
 
     private int kim_add_assessment_request_code = 2;
 
-    private ArrayList<Object> assessments = new ArrayList<>();
+    private ArrayList<KimAssessment> assessments = new ArrayList<>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,7 +60,7 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent myIntent = new Intent(KimMyAssessmentsActivity.this, KimAddAssessmentActivity.class);
                 myIntent.putExtra("method", "add");
-                myIntent.putExtra("course", getIntent().getExtras().getString("course"));
+                myIntent.putExtra("course", getIntent().getExtras().getLong("course"));
                 startActivityForResult(myIntent, kim_add_assessment_request_code);
             }
         });
@@ -70,18 +71,12 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        TinyDB tinyDB = new TinyDB(this);
-        ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", getIntent().getExtras().getLong("course")).findAll();
 
-        for (Object assessment : assessments) {
-            Log.d("MY ASSESSMENT", getIntent().getExtras().getString("course"));
+        this.assessments.addAll(assessments);
 
-            if (((KimAssessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
-                this.assessments.add(assessment);
-            }
-        }
-
-        kimMyAssessmentAdapter = new KimMyAssessmentAdapter(this, getIntent().getExtras().getString("course"), this.assessments, recyclerView);
+        kimMyAssessmentAdapter = new KimMyAssessmentAdapter(this, getIntent().getExtras().getLong("course"), this.assessments, recyclerView);
         recyclerView.setAdapter(kimMyAssessmentAdapter);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -102,17 +97,10 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 this.assessments.clear();
 
-                TinyDB tinyDB = new TinyDB(this);
-                ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", getIntent().getExtras().getLong("course")).findAll();
 
-                for (Object assessment : assessments) {
-                    if (((KimAssessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
-                        Log.d("ASSESSMENTS LIST", String.valueOf(assessment));
-                        this.assessments.add(assessment);
-                    }
-                }
-
-                Log.d("ASSESSMENTS LIST", String.valueOf(this.assessments));
+                this.assessments.addAll(assessments);
 
                 kimMyAssessmentAdapter.updateAdapter(this.assessments);
             }

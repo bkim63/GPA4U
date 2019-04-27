@@ -4,16 +4,23 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class KimCalculateGrade {
-    public static double calculateOverallGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
+    public static double calculateOverallGPA(ArrayList<KimCourse> courses) {
         double grade = 0.0;
         double totalCredit = 0.0;
         for (Object course : courses) {
-            totalCredit += ((KimCourse)course).credit;
+            totalCredit += ((KimCourse) course).credit;
         }
 
-        for (Object course : courses) {
-            grade += calculateGPAFromGrade(calculateCourseGPA(course, assessments, weights, false)) * ((KimCourse)course).credit / totalCredit;
+        Realm realm = Realm.getDefaultInstance();
+        for (KimCourse course : courses) {
+            RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
+            RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
+
+            grade += calculateGPAFromGrade(calculateCourseGPA(course, new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false)) * ((KimCourse) course).credit / totalCredit;
             Log.d("GPA", String.valueOf(grade));
         }
 
@@ -22,82 +29,66 @@ public class KimCalculateGrade {
 
     public static String calculateSUGrade(double grade) {
         String su = "U";
-        if (grade >=69.5) {
+        if (grade >= 69.5) {
             su = "S";
         }
         return su;
     }
 
-    public static double calculateOverallExpectedGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
+    public static double calculateOverallExpectedGPA(ArrayList<KimCourse> courses) {
         double grade = 0.0;
         double totalCredit = 0.0;
-        for (Object course : courses) {
-            totalCredit += ((KimCourse)course).credit;
+        for (KimCourse course : courses) {
+            totalCredit += ((KimCourse) course).credit;
         }
 
-        for (Object course : courses) {
-            grade += calculateGPAFromGrade(calculateCourseGPA(course, assessments, weights, true)) * ((KimCourse)course).credit / totalCredit;
+        Realm realm = Realm.getDefaultInstance();
+        for (KimCourse course : courses) {
+            RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
+            RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
+
+            grade += calculateGPAFromGrade(calculateCourseGPA(course, new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), true)) * ((KimCourse) course).credit / totalCredit;
             Log.d("GPA", String.valueOf(grade));
         }
 
         return grade;
     }
 
-    public static double calculateCourseGPA(Object course, ArrayList<Object> assessments, ArrayList<Object> weights, boolean expected) {
+    public static double calculateCourseGPA(KimCourse course, ArrayList<KimWeight> weights, ArrayList<KimAssessment> assessments, boolean expected) {
         double grade = 0.0;
 
         for (int i = 0; i < weights.size(); i++) {
             KimWeight weight = (KimWeight) weights.get(i);
 
-            Log.d("GRADE CALCULATION", weight.course);
-            Log.d("GRADE CALCULATION", ((KimCourse) course).id);
+            int assessmentCount = 0;
+            double percent = 0.0;
 
-            if (((KimCourse) course).id.equals(weight.course)) {
+            for (Object a : assessments) {
+                KimAssessment assessment = (KimAssessment) a;
 
-                int assessmentCount = 0;
-                double percent = 0.0;
 
-                for (Object a : assessments) {
-                    KimAssessment assessment = (KimAssessment) a;
-                    Log.d("GRADE CALCULATION", ((KimCourse) course).id);
-                    Log.d("GRADE CALCULATION", assessment.course);
-                    Log.d("GRADE CALCULATION", String.valueOf(((KimCourse) course).id.equals(assessment.course)));
-
-                    if (((KimCourse) course).id.equals(assessment.course)) {
-
-                        Log.d("GRADE CALCULATION", weight.id);
-                        Log.d("GRADE CALCULATION", assessment.weight);
-                        Log.d("GRADE CALCULATION", String.valueOf(weight.id.equals(assessment.weight)));
-
-                        if (weight.id.equals(assessment.weight)) {
-                            if (!expected) {
-                                if (!assessment.expected) {
-                                    percent += assessment.grade;
-                                    assessmentCount++;
-                                }
-                            } else {
-                                percent += assessment.grade;
-                                assessmentCount++;
-                            }
-                        }
+                if (!expected) {
+                    if (!assessment.expected) {
+                        percent += assessment.grade;
+                        assessmentCount++;
                     }
+                } else {
+                    percent += assessment.grade;
+                    assessmentCount++;
                 }
-
-                grade += (percent / (assessmentCount * 100)) * 100 * weight.percent / 100;
             }
+
+            grade += (percent / (assessmentCount * 100)) * 100 * weight.percent / 100;
         }
 
         double outOf = 0.0;
-        for (Object w : weights) {
-            KimWeight weight = (KimWeight) w;
-            if (weight.course.equals(((KimCourse) course).id)) {
-                outOf += weight.percent;
-            }
+        for (KimWeight weight : weights) {
+            outOf += weight.percent;
         }
 
         Log.d("GRADE CALCULATION", String.valueOf(outOf));
 
-        grade = grade / (outOf/100);
+        grade = grade / (outOf / 100);
 
         return grade;
     }

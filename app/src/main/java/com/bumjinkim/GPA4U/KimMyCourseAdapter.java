@@ -12,23 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mukesh.tinydb.TinyDB;
-
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.CourseViewHolder> {
 
     private Context context;
-    private ArrayList<Object> courses = new ArrayList<>();
-    private ArrayList<Object> assessments = new ArrayList<>();
-    private ArrayList<Object> weights = new ArrayList<>();
+    private ArrayList<KimCourse> courses = new ArrayList<>();
     private int kim_add_course_request_code = 1;
 
-    public KimMyCourseAdapter(Context context, ArrayList<Object> courses, ArrayList<Object> assessments, ArrayList<Object> weights, RecyclerView recyclerView) {
+    public KimMyCourseAdapter(Context context, ArrayList<KimCourse> courses, RecyclerView recyclerView) {
         this.context = context;
         this.courses = courses;
-        this.weights = weights;
-        this.assessments = assessments;
         this.recyclerView = recyclerView;
     }
 
@@ -41,10 +38,11 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(context, KimMyAssessmentsActivity.class);
-                myIntent.putExtra("course", ((KimCourse)courses.get(recyclerView.getChildAdapterPosition(v))).id);
+                myIntent.putExtra("course", ((KimCourse) courses.get(recyclerView.getChildAdapterPosition(v))).id);
                 context.startActivity(myIntent);
             }
         });
+        final Realm realm = Realm.getDefaultInstance();
         mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
@@ -60,17 +58,17 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
                             case 0:
                                 Intent editIntent = new Intent(context, KimAddCourseActivity.class);
                                 editIntent.putExtra("method", "edit");
-                                editIntent.putExtra("course", ((KimCourse)courses.get(recyclerView.getChildAdapterPosition(v))).id);
-                                ((FragmentActivity)context).startActivityForResult(editIntent, kim_add_course_request_code);
+                                editIntent.putExtra("course", ((KimCourse) courses.get(recyclerView.getChildAdapterPosition(v))).id);
+                                ((FragmentActivity) context).startActivityForResult(editIntent, kim_add_course_request_code);
                                 break;
                             case 1:
-                                TinyDB tinyDB = new TinyDB(context);
-                                ArrayList<Object> cs = tinyDB.getListObject("courses", KimCourse.class);
-                                cs.remove(((KimCourse)cs.get(recyclerView.getChildAdapterPosition(v))));
+                                realm.beginTransaction();
 
-                                tinyDB.putListObject("courses", cs);
+                                final RealmResults<KimCourse> results = realm.where(KimCourse.class).equalTo("id", ((KimCourse) courses.get(recyclerView.getChildAdapterPosition(v))).id).findAll();
+                                results.deleteAllFromRealm();
 
-                                courses = cs;
+                                realm.commitTransaction();
+                                courses.remove(recyclerView.getChildAdapterPosition(v));
 
                                 notifyDataSetChanged();
 
@@ -89,13 +87,17 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder courseViewHolder, int i) {
-        courseViewHolder.nameView.setText(((KimCourse)courses.get(i)).name);
+        courseViewHolder.nameView.setText(((KimCourse) courses.get(i)).name);
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", ((KimCourse) courses.get(i)).id).findAll();
+        RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", ((KimCourse) courses.get(i)).id).findAll();
+
         if (((KimCourse) courses.get(i)).su) {
-            courseViewHolder.gradeView.setText(KimCalculateGrade.calculateSUGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), assessments, weights, false)));
+            courseViewHolder.gradeView.setText(KimCalculateGrade.calculateSUGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false)));
         } else {
-            courseViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), assessments, weights, false)));
+            courseViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false)));
         }
-        courseViewHolder.creditView.setText(String.valueOf(((KimCourse)courses.get(i)).credit));
+        courseViewHolder.creditView.setText(String.valueOf(((KimCourse) courses.get(i)).credit));
     }
 
     @Override
@@ -103,10 +105,8 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
         return courses.size();
     }
 
-    public void updateAdapter(ArrayList<Object> courses, ArrayList<Object> weights, ArrayList<Object> assessments) {
+    public void updateAdapter(ArrayList<KimCourse> courses) {
         this.courses = courses;
-        this.weights = weights;
-        this.assessments = assessments;
         notifyDataSetChanged();
     }
 

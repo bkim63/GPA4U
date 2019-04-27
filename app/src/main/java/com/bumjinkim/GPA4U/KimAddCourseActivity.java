@@ -14,9 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.mukesh.tinydb.TinyDB;
-
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
@@ -55,6 +56,8 @@ public class KimAddCourseActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        final Realm realm = Realm.getDefaultInstance();
+
         weightLayout = findViewById(R.id.kim_add_class_weight);
         final TextView nameView = findViewById(R.id.kim_add_class_class_name);
         final Spinner creditView = findViewById(R.id.kim_add_course_credits_dropdown);
@@ -66,58 +69,51 @@ public class KimAddCourseActivity extends AppCompatActivity {
         KimCourse course = null;
         int index = 0;
         final String method = getIntent().getExtras().getString("method");
-        final String courseId = getIntent().getExtras().getString("course");
+        final long courseId = getIntent().getExtras().getLong("course");
 
         if (method.equals("edit")) {
             setTitle("Edit Course");
 
-            TinyDB tinyDB = new TinyDB(KimAddCourseActivity.this);
-            ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
-            ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
+            RealmResults<KimCourse> courses = realm.where(KimCourse.class).equalTo("id", courseId).findAll();
+            RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
 
-            for (int i = 0; i < courses.size(); i++) {
-                if (((KimCourse) courses.get(i)).id.equals(getIntent().getExtras().get("course"))) {
-                    course = ((KimCourse) (courses.get(i)));
-                    index = i;
+            course = courses.get(0);
 
-                    nameView.setText(course.name);
-                    creditView.setSelection(course.credit - 1);
-                    gradeSystemView.setSelection(course.su ? 1 : 0);
-                }
-            }
+            nameView.setText(course.name);
+            creditView.setSelection(course.credit - 1);
+            gradeSystemView.setSelection(course.su ? 1 : 0);
 
-            for (Object o : weights) {
-                if (((KimWeight) o).course.equals(courseId)) {
-                    LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
-                    textViewLayout.setOrientation(HORIZONTAL);
 
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    textViewLayout.setLayoutParams(layoutParams);
+            for (KimWeight o : weights) {
+                LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
+                textViewLayout.setOrientation(HORIZONTAL);
 
-                    EditText weightNameView = new EditText(KimAddCourseActivity.this);
-                    LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                            300, 80
-                    );
-                    textViewParams.setMargins(50, 30, 0, 50);
-                    weightNameView.setText(((KimWeight) o).name);
-                    weightNameView.setLayoutParams(textViewParams);
-                    weightNameViews.add(weightNameView);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                textViewLayout.setLayoutParams(layoutParams);
 
-                    EditText weightPercentView = new EditText(KimAddCourseActivity.this);
-                    LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                            300, 80
-                    );
-                    textViewParams2.setMargins(0, 30, 50, 50);
-                    weightPercentView.setLayoutParams(textViewParams2);
+                EditText weightNameView = new EditText(KimAddCourseActivity.this);
+                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
+                        300, 80
+                );
+                textViewParams.setMargins(50, 30, 0, 50);
+                weightNameView.setText(((KimWeight) o).name);
+                weightNameView.setLayoutParams(textViewParams);
+                weightNameViews.add(weightNameView);
 
-                    weightPercentView.setText(String.valueOf(((KimWeight) o).percent));
-                    weightPercentViews.add(weightPercentView);
+                EditText weightPercentView = new EditText(KimAddCourseActivity.this);
+                LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
+                        300, 80
+                );
+                textViewParams2.setMargins(0, 30, 50, 50);
+                weightPercentView.setLayoutParams(textViewParams2);
 
-                    textViewLayout.addView(weightNameView);
-                    textViewLayout.addView(weightPercentView);
+                weightPercentView.setText(String.valueOf(((KimWeight) o).percent));
+                weightPercentViews.add(weightPercentView);
 
-                    weightLayout.addView(textViewLayout);
-                }
+                textViewLayout.addView(weightNameView);
+                textViewLayout.addView(weightPercentView);
+
+                weightLayout.addView(textViewLayout);
             }
 
         } else {
@@ -126,44 +122,58 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
         Button saveButton = findViewById(R.id.kim_add_course_save_button);
         final KimCourse finalCourse = course;
-        final int finalIndex = index;
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TinyDB tinyDB = new TinyDB(KimAddCourseActivity.this);
-                ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
-                ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
-
                 KimCourse c = null;
                 if (method.equals("edit")) {
+                    realm.beginTransaction();
+
                     finalCourse.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
                     finalCourse.name = String.valueOf(nameView.getText());
                     finalCourse.su = gradeSystemView.getSelectedItemPosition() != 0;
-                    courses.set(finalIndex, finalCourse);
                     c = finalCourse;
 
-                    ArrayList<Object> removedWeights = weights;
-                    for (int i = 0; i < weights.size(); i++) {
-                        KimWeight weight = (KimWeight) weights.get(i);
-                        if (weight.course.equals(finalCourse.id)) {
-                            removedWeights.remove(i);
-                            tinyDB.putListObject("weights", removedWeights);
-                        }
-                    }
-
+                    realm.copyToRealmOrUpdate(finalCourse);
+                    realm.commitTransaction();
                 } else {
-                    c = new KimCourse(String.valueOf(nameView.getText()), "No Grade", Integer.valueOf(String.valueOf(creditView.getSelectedItem())), gradeSystemView.getSelectedItemPosition() != 0);
-                    courses.add(c);
+                    realm.beginTransaction();
+
+                    c = new KimCourse();
+                    Number currentIdNum = realm.where(KimCourse.class).max("id");
+                    long nextId;
+                    if (currentIdNum == null) {
+                        nextId = 1;
+                    } else {
+                        nextId = currentIdNum.intValue() + 1;
+                    }
+                    c.id = nextId;
+                    c.name = String.valueOf(nameView.getText());
+                    c.grade = "No Grade";
+                    c.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
+                    c.su = gradeSystemView.getSelectedItemPosition() != 0;
+                    realm.copyToRealmOrUpdate(c);
+                    realm.commitTransaction();
                 }
 
                 for (int i = 0; i < weightNameViews.size(); i++) {
+                    realm.beginTransaction();
                     EditText weightPercentView = weightPercentViews.get(i);
-                    KimWeight weight = new KimWeight(String.valueOf(weightNameViews.get(i).getText()), Double.valueOf(String.valueOf(weightPercentView.getText())), c.id);
-                    weights.add(weight);
+                    KimWeight weight = new KimWeight();
+                    Number currentIdNum = realm.where(KimWeight.class).max("id");
+                    long nextId;
+                    if (currentIdNum == null) {
+                        nextId = 1;
+                    } else {
+                        nextId = currentIdNum.intValue() + 1;
+                    }
+                    weight.id = nextId;
+                    weight.name = String.valueOf(weightNameViews.get(i).getText());
+                    weight.percent = Double.valueOf(String.valueOf(weightPercentView.getText()));
+                    weight.course = c;
+                    realm.copyToRealmOrUpdate(weight);
+                    realm.commitTransaction();
                 }
-
-                tinyDB.putListObject("courses", courses);
-                tinyDB.putListObject("weights", weights);
 
                 setResult(RESULT_OK);
                 finish();
