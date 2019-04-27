@@ -16,10 +16,13 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
     private Context context;
     private ArrayList<Object> assessments;
 
-    public KimMyAssessmentAdapter(Context context, ArrayList<Object> assessments) {
+    public KimMyAssessmentAdapter(Context context, ArrayList<Object> assessments, RecyclerView recyclerView) {
         this.context = context;
         this.assessments = assessments;
+        this.recyclerView = recyclerView;
     }
+
+    private RecyclerView recyclerView;
 
     @Override
     public KimMyAssessmentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

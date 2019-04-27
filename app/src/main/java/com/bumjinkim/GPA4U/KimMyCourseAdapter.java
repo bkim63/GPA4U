@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +19,22 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
     private Context context;
     private ArrayList<Object> courses = new ArrayList<>();
 
-    public KimMyCourseAdapter(Context context, ArrayList<Object> courses) {
+    public KimMyCourseAdapter(Context context, ArrayList<Object> courses, RecyclerView recyclerView) {
         this.context = context;
         this.courses = courses;
+        this.recyclerView = recyclerView;
     }
 
+    private RecyclerView recyclerView;
+
     @Override
-    public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
-        View mView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_kim_my_course, viewGroup, false);
+    public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        final View mView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_kim_my_course, viewGroup, false);
         mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(context, KimMyAssessmentsActivity.class);
-                myIntent.putExtra("course", ((Course)courses.get(i)).id);
+                myIntent.putExtra("course", ((Course)courses.get(recyclerView.getChildAdapterPosition(v))).id);
                 context.startActivity(myIntent);
             }
         });

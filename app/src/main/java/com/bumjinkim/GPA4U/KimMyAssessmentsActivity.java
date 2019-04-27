@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -76,12 +77,14 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
         ArrayList<Object> assessments = tinyDB.getListObject("assessments", Assessment.class);
 
         for (Object assessment : assessments) {
+            Log.d("MY ASSESSMENT", getIntent().getExtras().getString("course"));
+
             if (((Assessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
                 this.assessments.add(assessment);
             }
         }
 
-        kimMyAssessmentAdapter = new KimMyAssessmentAdapter(this, this.assessments);
+        kimMyAssessmentAdapter = new KimMyAssessmentAdapter(this, this.assessments, recyclerView);
         recyclerView.setAdapter(kimMyAssessmentAdapter);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -100,6 +103,8 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
 
         if (requestCode == kim_add_assessment_request_code) {
             if (resultCode == RESULT_OK) {
+                this.assessments.clear();
+
                 TinyDB tinyDB = new TinyDB(this);
                 ArrayList<Object> assessments = tinyDB.getListObject("assessments", Assessment.class);
 
@@ -109,7 +114,7 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
                     }
                 }
 
-                kimMyAssessmentAdapter.updateAdapter(assessments);
+                kimMyAssessmentAdapter.updateAdapter(this.assessments);
             }
         }
     }
