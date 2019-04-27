@@ -35,7 +35,7 @@ public class KimMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_kim_main);
 
         setTitle(R.string.title_activity_kim_my_courses);
 
