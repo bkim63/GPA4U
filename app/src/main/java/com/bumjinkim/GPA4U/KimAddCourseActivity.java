@@ -138,18 +138,19 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     finalCourse.name = String.valueOf(nameView.getText());
                     courses.set(finalIndex, finalCourse);
                     c = finalCourse;
+
+                    ArrayList<Object> removedWeights = weights;
+                    for (int i = 0; i < weights.size(); i++) {
+                        KimWeight weight = (KimWeight) weights.get(i);
+                        if (weight.course.equals(finalCourse.id)) {
+                            removedWeights.remove(i);
+                            tinyDB.putListObject("weights", removedWeights);
+                        }
+                    }
+
                 } else {
                     c = new KimCourse(String.valueOf(nameView.getText()), "No Grade", Integer.valueOf(String.valueOf(creditView.getSelectedItem())));
                     courses.add(c);
-                }
-
-                ArrayList removedWeights = weights;
-                for (int i = 0; i < weights.size(); i++) {
-                    KimWeight weight = (KimWeight) weights.get(i);
-                    if (weight.course.equals(c.id)) {
-                        removedWeights.remove(i);
-                        tinyDB.putListObject("weights", removedWeights);
-                    }
                 }
 
                 for (int i = 0; i < weightNameViews.size(); i++) {
