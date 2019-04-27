@@ -5,14 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Assessment {
+public class KimAssessment {
     public String course;
     public String name;
     public boolean expected;
     public Double weight;
     public Double grade;
 
-    public Assessment(String course, String name, boolean expected, Double weight, Double grade) {
+    public KimAssessment(String course, String name, boolean expected, Double weight, Double grade) {
         this.course = course;
         this.name = name;
         this.expected = expected;

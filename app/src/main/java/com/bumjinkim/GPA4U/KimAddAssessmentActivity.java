@@ -48,12 +48,12 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
-        ArrayList<Object> weights = tinyDB.getListObject("weights", Weight.class);
+        ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
 
         if (weights.size() != 0) {
             ArrayList<String> spinnerItems = new ArrayList();
             for (Object weight : weights) {
-                spinnerItems.add(((Weight) weight).name);
+                spinnerItems.add(((KimWeight) weight).name);
             }
             Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -73,9 +73,9 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
-                ArrayList<Object> assessments = tinyDB.getListObject("assessments", Assessment.class);
+                ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
 
-                Assessment assessment = new Assessment(getIntent().getExtras().getString("course"), String.valueOf(nameView.getText()), expectedView.isChecked(), Double.valueOf(String.valueOf(weightView.getText())), Double.valueOf(String.valueOf(gradeView.getText())));
+                KimAssessment assessment = new KimAssessment(getIntent().getExtras().getString("course"), String.valueOf(nameView.getText()), expectedView.isChecked(), Double.valueOf(String.valueOf(weightView.getText())), Double.valueOf(String.valueOf(gradeView.getText())));
                 assessments.add(assessment);
 
                 tinyDB.putListObject("assessments", assessments);

@@ -57,9 +57,9 @@ public class KimAddCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TinyDB tinyDB = new TinyDB(KimAddCourseActivity.this);
-                ArrayList<Object> courses = tinyDB.getListObject("courses", Course.class);
+                ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
 
-                Course course = new Course(String.valueOf(nameView.getText()), "No Grade", 3);
+                KimCourse course = new KimCourse(String.valueOf(nameView.getText()), "No Grade", 3);
                 courses.add(course);
 
                 tinyDB.putListObject("courses", courses);

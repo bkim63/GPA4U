@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import com.mukesh.tinydb.TinyDB;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,7 +45,7 @@ public class KimMyCoursesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         TinyDB tinyDB = new TinyDB(getContext());
-        ArrayList<Object> courses = tinyDB.getListObject("courses", Course.class);
+        ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
 
         myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), courses, recyclerView);
         recyclerView.setAdapter(myCourseAdapter);
@@ -62,7 +60,7 @@ public class KimMyCoursesFragment extends Fragment {
         if (requestCode == kim_add_course_request_code) {
             if (resultCode == RESULT_OK) {
                 TinyDB tinyDB = new TinyDB(getContext());
-                ArrayList<Object> courses = tinyDB.getListObject("courses", Course.class);
+                ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
 
                 myCourseAdapter.updateAdapter(courses);
             }

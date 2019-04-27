@@ -1,13 +1,10 @@
 package com.bumjinkim.GPA4U;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +15,6 @@ import android.view.View;
 import com.mukesh.tinydb.TinyDB;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class KimMyAssessmentsActivity extends AppCompatActivity {
 
@@ -74,12 +70,12 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         TinyDB tinyDB = new TinyDB(this);
-        ArrayList<Object> assessments = tinyDB.getListObject("assessments", Assessment.class);
+        ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
 
         for (Object assessment : assessments) {
             Log.d("MY ASSESSMENT", getIntent().getExtras().getString("course"));
 
-            if (((Assessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
+            if (((KimAssessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
                 this.assessments.add(assessment);
             }
         }
@@ -106,10 +102,10 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
                 this.assessments.clear();
 
                 TinyDB tinyDB = new TinyDB(this);
-                ArrayList<Object> assessments = tinyDB.getListObject("assessments", Assessment.class);
+                ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
 
                 for (Object assessment : assessments) {
-                    if (((Assessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
+                    if (((KimAssessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
                         Log.d("ASSESSMENTS LIST", String.valueOf(assessment));
                         this.assessments.add(assessment);
                     }

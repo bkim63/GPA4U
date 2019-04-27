@@ -3,16 +3,13 @@ package com.bumjinkim.GPA4U;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.CourseViewHolder> {
 
@@ -34,7 +31,7 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(context, KimMyAssessmentsActivity.class);
-                myIntent.putExtra("course", ((Course)courses.get(recyclerView.getChildAdapterPosition(v))).id);
+                myIntent.putExtra("course", ((KimCourse)courses.get(recyclerView.getChildAdapterPosition(v))).id);
                 context.startActivity(myIntent);
             }
         });
@@ -43,9 +40,9 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder courseViewHolder, int i) {
-        courseViewHolder.nameView.setText(((Course)courses.get(i)).name);
-        courseViewHolder.gradeView.setText(((Course)courses.get(i)).grade);
-        courseViewHolder.creditView.setText(String.valueOf(((Course)courses.get(i)).credit));
+        courseViewHolder.nameView.setText(((KimCourse)courses.get(i)).name);
+        courseViewHolder.gradeView.setText(((KimCourse)courses.get(i)).grade);
+        courseViewHolder.creditView.setText(String.valueOf(((KimCourse)courses.get(i)).credit));
     }
 
     @Override

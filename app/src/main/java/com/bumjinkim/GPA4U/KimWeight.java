@@ -1,11 +1,11 @@
 package com.bumjinkim.GPA4U;
 
-public class Weight {
+public class KimWeight {
     public String name;
     public Double percent;
     public String course;
 
-    public Weight(String name, Double percent, String course) {
+    public KimWeight(String name, Double percent, String course) {
         this.name = name;
         this.percent = percent;
         this.course = course;
