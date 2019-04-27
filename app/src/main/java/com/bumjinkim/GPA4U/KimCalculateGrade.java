@@ -5,7 +5,23 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class KimCalculateGrade {
-    public static double calculateCourseGPA(Object course, ArrayList<Object> assessments, ArrayList<Object> weights) {
+    public static double calculateOverallGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
+        double gpa = 0.0;
+        for (Object course : courses) {
+            gpa += calculateCourseGPA(course, assessments, weights, false);
+        }
+        return gpa;
+    }
+
+    public static double calculateOverallExpectedGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
+        double gpa = 0.0;
+        for (Object course : courses) {
+            gpa += calculateCourseGPA(course, assessments, weights, true);
+        }
+        return gpa;
+    }
+
+    public static double calculateCourseGPA(Object course, ArrayList<Object> assessments, ArrayList<Object> weights, boolean expected) {
         double grade = 0.0;
         boolean missingAssessment = false;
 
@@ -24,7 +40,7 @@ public class KimCalculateGrade {
 
                 for (Object a : assessments) {
                     KimAssessment assessment = (KimAssessment) a;
-                    if (((KimCourse) course).id.equals(assessment.course)) {
+                    if (((KimCourse) course).id.equals(assessment.course) && assessment.expected == expected) {
                         if (weight.id.equals(assessment.weight)) {
                             percent += assessment.grade;
                             assessmentCount++;

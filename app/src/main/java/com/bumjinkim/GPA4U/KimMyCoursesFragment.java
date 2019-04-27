@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mukesh.tinydb.TinyDB;
 
@@ -39,6 +40,7 @@ public class KimMyCoursesFragment extends Fragment {
             }
         });
 
+
         recyclerView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_list_view);
         recyclerView.setHasFixedSize(true);
 
@@ -49,6 +51,11 @@ public class KimMyCoursesFragment extends Fragment {
         ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
         ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
         ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
+
+        TextView gpaView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_gpa_view);
+        TextView expectedGPAView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_expected_gpa_view);
+        gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(assessments, weights, courses)));
+        expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(assessments, weights, courses)));
 
         myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), courses, assessments, weights, recyclerView);
         recyclerView.setAdapter(myCourseAdapter);
