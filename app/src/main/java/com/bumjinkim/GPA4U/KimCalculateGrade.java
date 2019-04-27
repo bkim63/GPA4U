@@ -8,27 +8,23 @@ public class KimCalculateGrade {
     public static double calculateOverallGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
         double grade = 0.0;
         for (Object course : courses) {
-            grade += calculateCourseGPA(course, assessments, weights, false);
+            grade += calculateGPAFromGrade(calculateCourseGPA(course, assessments, weights, false));
+            Log.d("GPA", String.valueOf(grade));
         }
 
-        return calculateGPAFromGrade(grade);
+        return grade/courses.size();
     }
 
     public static double calculateOverallExpectedGPA(ArrayList<Object> assessments, ArrayList<Object> weights, ArrayList<Object> courses) {
         double grade = 0.0;
         for (Object course : courses) {
-            grade += calculateCourseGPA(course, assessments, weights, true);
+            grade += calculateGPAFromGrade(calculateCourseGPA(course, assessments, weights, true));
         }
-        return calculateGPAFromGrade(grade);
+        return grade/courses.size();
     }
 
     public static double calculateCourseGPA(Object course, ArrayList<Object> assessments, ArrayList<Object> weights, boolean expected) {
         double grade = 0.0;
-        double weightTotal = 0.0;
-
-        ArrayList<KimWeight> missingWeights = new ArrayList<>();
-
-        boolean missingAssessment = false;
 
         for (int i = 0; i < weights.size(); i++) {
             KimWeight weight = (KimWeight) weights.get(i);
@@ -63,38 +59,25 @@ public class KimCalculateGrade {
                                 percent += assessment.grade;
                                 assessmentCount++;
                             }
-                            weightTotal += weight.percent / 100;
                         }
                     }
                 }
 
-                if (weightTotal < 100) {
-                    missingWeights.add(weight);
-                    missingAssessment = true;
-                }
-
-                Log.d("GRADE CALCULATION", String.valueOf(percent));
-                Log.d("GRADE CALCULATION", String.valueOf(assessmentCount));
-                Log.d("GRADE CALCULATION", String.valueOf(weight.percent));
-
                 grade += (percent / (assessmentCount * 100)) * 100 * weight.percent / 100;
-                Log.d("MISSING ASSESSMENTS", String.valueOf(grade));
             }
         }
 
-        if (missingAssessment) {
-            double percent = 0.0;
-
-            Log.d("MISSING ASSESSMENTS", String.valueOf(percent));
-            Log.d("MISSING ASSESSMENTS", String.valueOf(grade));
-
-            grade = grade / (weightTotal);
-
-            Log.d("MISSING ASSESSMENTS", String.valueOf(grade));
-
+        double outOf = 0.0;
+        for (Object w : weights) {
+            KimWeight weight = (KimWeight) w;
+            if (weight.course.equals(((KimCourse) course).id)) {
+                outOf += weight.percent;
+            }
         }
 
-        Log.d("GRADE CALCULATE", String.valueOf(grade));
+        Log.d("GRADE CALCULATION", String.valueOf(outOf));
+
+        grade = grade / (outOf/100);
 
         return grade;
     }
