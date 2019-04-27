@@ -34,6 +34,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             return false;
         }
     };
+    private ArrayList<KimWeight> courseWeights = new ArrayList<>();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -54,38 +55,40 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             ArrayList<String> spinnerItems = new ArrayList();
             for (Object weight : weights) {
                 if (((KimWeight) weight).course.equals(getIntent().getExtras().getString("course"))) {
+                    courseWeights.add((KimWeight) weight);
                     spinnerItems.add(((KimWeight) weight).name);
                 }
             }
-            Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
+            final Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, spinnerItems);
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             s.setAdapter(adapter);
+
+            final TextView nameView = findViewById(R.id.kim_add_assessment_name);
+            final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);
+            final CheckBox expectedView = findViewById(R.id.kim_add_assessment_expected);
+            final TextView weightView = findViewById(R.id.kim_add_assessment_weight);
+
+            Button saveButton = findViewById(R.id.kim_add_assessment_save_button);
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
+                    ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
+
+                    KimAssessment assessment = new KimAssessment(getIntent().getExtras().getString("course"), String.valueOf(nameView.getText()), expectedView.isChecked(), courseWeights.get(s.getSelectedItemPosition()).id, Double.valueOf(String.valueOf(gradeView.getText())));
+                    assessments.add(assessment);
+
+                    tinyDB.putListObject("assessments", assessments);
+
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
         }
 
-        final TextView nameView = findViewById(R.id.kim_add_assessment_name);
-        final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);
-        final CheckBox expectedView = findViewById(R.id.kim_add_assessment_expected);
-        final TextView weightView = findViewById(R.id.kim_add_assessment_weight);
-
-        Button saveButton = findViewById(R.id.kim_add_assessment_save_button);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
-                ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
-
-                KimAssessment assessment = new KimAssessment(getIntent().getExtras().getString("course"), String.valueOf(nameView.getText()), expectedView.isChecked(), Double.valueOf(String.valueOf(weightView.getText())), Double.valueOf(String.valueOf(gradeView.getText())));
-                assessments.add(assessment);
-
-                tinyDB.putListObject("assessments", assessments);
-
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
     }
 
     @Override

@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class KimAssessment {
+    public String id;
     public String course;
     public String name;
     public boolean expected;
-    public Double weight;
+    public String weight;
     public Double grade;
 
-    public KimAssessment(String course, String name, boolean expected, Double weight, Double grade) {
+    public KimAssessment(String course, String name, boolean expected, String weight, Double grade) {
+        this.id = KimRandomCourseID.randomString(21);
         this.course = course;
         this.name = name;
         this.expected = expected;

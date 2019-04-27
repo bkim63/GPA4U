@@ -46,8 +46,10 @@ public class KimMyCoursesFragment extends Fragment {
 
         TinyDB tinyDB = new TinyDB(getContext());
         ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
+        ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
+        ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
 
-        myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), courses, recyclerView);
+        myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), courses, assessments, weights, recyclerView);
         recyclerView.setAdapter(myCourseAdapter);
 
         return fragmentKimMyCourses;

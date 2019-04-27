@@ -15,10 +15,14 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
 
     private Context context;
     private ArrayList<Object> courses = new ArrayList<>();
+    private ArrayList<Object> assessments = new ArrayList<>();
+    private ArrayList<Object> weights = new ArrayList<>();
 
-    public KimMyCourseAdapter(Context context, ArrayList<Object> courses, RecyclerView recyclerView) {
+    public KimMyCourseAdapter(Context context, ArrayList<Object> courses, ArrayList<Object> assessments, ArrayList<Object> weights, RecyclerView recyclerView) {
         this.context = context;
         this.courses = courses;
+        this.weights = weights;
+        this.assessments = assessments;
         this.recyclerView = recyclerView;
     }
 
@@ -41,7 +45,7 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder courseViewHolder, int i) {
         courseViewHolder.nameView.setText(((KimCourse)courses.get(i)).name);
-        courseViewHolder.gradeView.setText(((KimCourse)courses.get(i)).grade);
+        courseViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), assessments, weights)));
         courseViewHolder.creditView.setText(String.valueOf(((KimCourse)courses.get(i)).credit));
     }
 
