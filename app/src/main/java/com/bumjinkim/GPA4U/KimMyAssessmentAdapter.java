@@ -3,6 +3,7 @@ package com.bumjinkim.GPA4U;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,9 +54,8 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
         }
     }
 
-    public void updateAdapter(List<Object> assessments){
-        this.assessments.clear();
-        this.assessments.addAll(assessments);
+    public void updateAdapter(ArrayList<Object> assessments){
+        this.assessments = assessments;
         notifyDataSetChanged();
     }
 }

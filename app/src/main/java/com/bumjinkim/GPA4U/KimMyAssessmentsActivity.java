@@ -110,9 +110,12 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
 
                 for (Object assessment : assessments) {
                     if (((Assessment)assessment).course.equals(getIntent().getExtras().getString("course"))) {
+                        Log.d("ASSESSMENTS LIST", String.valueOf(assessment));
                         this.assessments.add(assessment);
                     }
                 }
+
+                Log.d("ASSESSMENTS LIST", String.valueOf(this.assessments));
 
                 kimMyAssessmentAdapter.updateAdapter(this.assessments);
             }

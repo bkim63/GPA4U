@@ -66,9 +66,8 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
         }
     }
 
-    public void updateAdapter(List<Object> courses){
-        this.courses.clear();
-        this.courses.addAll(courses);
+    public void updateAdapter(ArrayList<Object> courses){
+        this.courses = courses;
         notifyDataSetChanged();
     }
 }
