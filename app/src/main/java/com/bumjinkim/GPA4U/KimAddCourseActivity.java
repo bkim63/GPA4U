@@ -143,6 +143,15 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     courses.add(c);
                 }
 
+                ArrayList removedWeights = weights;
+                for (int i = 0; i < weights.size(); i++) {
+                    KimWeight weight = (KimWeight) weights.get(i);
+                    if (weight.course.equals(c.id)) {
+                        removedWeights.remove(i);
+                        tinyDB.putListObject("weights", removedWeights);
+                    }
+                }
+
                 for (int i = 0; i < weightNameViews.size(); i++) {
                     EditText weightPercentView = weightPercentViews.get(i);
                     KimWeight weight = new KimWeight(String.valueOf(weightNameViews.get(i).getText()), Double.valueOf(String.valueOf(weightPercentView.getText())), c.id);
