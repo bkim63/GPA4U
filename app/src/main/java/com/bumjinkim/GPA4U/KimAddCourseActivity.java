@@ -14,6 +14,8 @@ import com.mukesh.tinydb.TinyDB;
 
 import java.util.ArrayList;
 
+import static android.widget.LinearLayout.HORIZONTAL;
+
 public class KimAddCourseActivity extends AppCompatActivity {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -71,18 +73,22 @@ public class KimAddCourseActivity extends AppCompatActivity {
         weightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                weightLayout.addView(createNewWeight());
+                LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
+                textViewLayout.setOrientation(HORIZONTAL);
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                textViewLayout.setLayoutParams(layoutParams);
+
+                TextView weightNameView = new TextView(KimAddCourseActivity.this);
+                TextView weightPercentView = new TextView(KimAddCourseActivity.this);
+
+                textViewLayout.addView(weightNameView);
+                textViewLayout.addView(weightPercentView);
+
+                weightLayout.addView(textViewLayout);
             }
         });
     }
-
-//    private LinearLayout createNewWeight() {
-//        final LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        final TextView textView = new TextView(this);
-//        textView.setLayoutParams(lparams);
-//        textView.setText("New text: " + text);
-//        return textView;
-//    }
 
     @Override
     public boolean onSupportNavigateUp() {

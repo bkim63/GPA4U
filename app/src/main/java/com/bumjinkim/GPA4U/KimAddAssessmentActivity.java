@@ -47,16 +47,21 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        String[] spinnerItems = new String[] {
-                "Assignments", "Project", "Participation", "Quiz"
-        };
-        Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, spinnerItems);
+        TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
+        ArrayList<Object> weights = tinyDB.getListObject("weights", Weight.class);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (weights.size() != 0) {
+            ArrayList<String> spinnerItems = new ArrayList();
+            for (Object weight : weights) {
+                spinnerItems.add(((Weight) weight).name);
+            }
+            Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, spinnerItems);
 
-        s.setAdapter(adapter);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            s.setAdapter(adapter);
+        }
 
         final TextView nameView = findViewById(R.id.kim_add_assessment_name);
         final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);
