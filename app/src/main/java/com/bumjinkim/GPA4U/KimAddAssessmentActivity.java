@@ -65,6 +65,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             s.setAdapter(adapter);
+            s.setSelection(0);
 
             final TextView nameView = findViewById(R.id.kim_add_assessment_name);
             final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);

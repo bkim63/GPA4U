@@ -34,6 +34,7 @@ public class KimMyCoursesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getActivity(), KimAddCourseActivity.class);
+                myIntent.putExtra("method", "add");
                 startActivityForResult(myIntent, kim_add_course_request_code);
             }
         });
@@ -63,8 +64,10 @@ public class KimMyCoursesFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 TinyDB tinyDB = new TinyDB(getContext());
                 ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
+                ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
+                ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
 
-                myCourseAdapter.updateAdapter(courses);
+                myCourseAdapter.updateAdapter(courses, weights, assessments);
             }
         }
     }

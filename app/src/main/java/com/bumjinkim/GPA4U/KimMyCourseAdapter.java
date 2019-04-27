@@ -1,13 +1,18 @@
 package com.bumjinkim.GPA4U;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.mukesh.tinydb.TinyDB;
 
 import java.util.ArrayList;
 
@@ -17,6 +22,7 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
     private ArrayList<Object> courses = new ArrayList<>();
     private ArrayList<Object> assessments = new ArrayList<>();
     private ArrayList<Object> weights = new ArrayList<>();
+    private int kim_add_course_request_code = 1;
 
     public KimMyCourseAdapter(Context context, ArrayList<Object> courses, ArrayList<Object> assessments, ArrayList<Object> weights, RecyclerView recyclerView) {
         this.context = context;
@@ -39,6 +45,41 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
                 context.startActivity(myIntent);
             }
         });
+        mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View v) {
+                final CharSequence[] items = {"Edit", "Delete"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder.setTitle("Select");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        switch (item) {
+                            case 0:
+                                Intent editIntent = new Intent(context, KimAddCourseActivity.class);
+                                editIntent.putExtra("method", "edit");
+                                editIntent.putExtra("course", ((KimCourse)courses.get(recyclerView.getChildAdapterPosition(v))).id);
+                                ((FragmentActivity)context).startActivityForResult(editIntent, kim_add_course_request_code);
+                                break;
+                            case 1:
+                                TinyDB tinyDB = new TinyDB(context);
+                                ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
+                                courses.remove(((KimCourse)courses.get(recyclerView.getChildAdapterPosition(v))));
+
+                                tinyDB.putListObject("courses", courses);
+
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                builder.show();
+                return true;
+            }
+        });
         return new CourseViewHolder(mView);
     }
 
@@ -54,6 +95,13 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
         return courses.size();
     }
 
+    public void updateAdapter(ArrayList<Object> courses, ArrayList<Object> weights, ArrayList<Object> assessments) {
+        this.courses = courses;
+        this.weights = weights;
+        this.assessments = assessments;
+        notifyDataSetChanged();
+    }
+
     public static class CourseViewHolder extends RecyclerView.ViewHolder {
         public TextView nameView;
         public TextView gradeView;
@@ -65,10 +113,7 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
             gradeView = (TextView) itemView.findViewById(R.id.kim_my_course_grade_view);
             creditView = (TextView) itemView.findViewById(R.id.kim_my_course_credit_view);
         }
+
     }
 
-    public void updateAdapter(ArrayList<Object> courses){
-        this.courses = courses;
-        notifyDataSetChanged();
-    }
 }
