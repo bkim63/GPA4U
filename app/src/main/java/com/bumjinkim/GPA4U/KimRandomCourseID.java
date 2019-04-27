@@ -2,7 +2,7 @@ package com.bumjinkim.GPA4U;
 
 import java.util.Random;
 
-public class RandomString {
+public class KimRandomCourseID {
 
     public static final String DATA = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 

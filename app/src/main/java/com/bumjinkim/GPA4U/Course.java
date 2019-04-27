@@ -7,7 +7,7 @@ public class Course {
     public int credit;
 
     public Course(String name, String grade, int credit) {
-        this.id = RandomString.randomString(20);
+        this.id = KimRandomCourseID.randomString(20);
         this.name = name;
         this.grade = grade;
         this.credit = credit;
