@@ -65,10 +65,13 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
                                 break;
                             case 1:
                                 TinyDB tinyDB = new TinyDB(context);
-                                ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
-                                courses.remove(((KimCourse)courses.get(recyclerView.getChildAdapterPosition(v))));
+                                ArrayList<Object> cs = tinyDB.getListObject("courses", KimCourse.class);
+                                cs.remove(((KimCourse)cs.get(recyclerView.getChildAdapterPosition(v))));
 
-                                tinyDB.putListObject("courses", courses);
+                                tinyDB.putListObject("courses", cs);
+
+                                courses = cs;
+
                                 notifyDataSetChanged();
 
                                 break;

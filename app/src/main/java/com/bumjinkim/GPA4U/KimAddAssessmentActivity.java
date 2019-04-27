@@ -106,7 +106,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                     TinyDB tinyDB = new TinyDB(KimAddAssessmentActivity.this);
                     ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
 
-                    KimAssessment assessment = new KimAssessment(getIntent().getExtras().getString("course"), String.valueOf(nameView.getText()), expectedView.isChecked(), courseWeights.get(s.getSelectedItemPosition()).id, Double.valueOf(String.valueOf(gradeView.getText())));
+                    KimAssessment assessment = new KimAssessment(getIntent().getExtras().getString("course"), String.valueOf(nameView.getText()), expectedView.isChecked(), courseWeights.get(s.getSelectedItemPosition()).id, Double.valueOf(String.valueOf(gradeView.getText())), Double.valueOf(String.valueOf(weightView.getText())));
                     assessments.add(assessment);
 
                     tinyDB.putListObject("assessments", assessments);

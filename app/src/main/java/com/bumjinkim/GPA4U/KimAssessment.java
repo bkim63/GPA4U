@@ -14,12 +14,12 @@ public class KimAssessment {
     public Double grade;
     public Double assessmentWeight;
 
-    public KimAssessment(String course, String name, boolean expected, String weight, Double grade) {
-        this.id = KimRandomCourseID.randomString(21);
+    public KimAssessment(String course, String name, boolean expected, String weight, Double grade, Double assessmentWeight) {
         this.course = course;
         this.name = name;
         this.expected = expected;
         this.weight = weight;
         this.grade = grade;
+        this.assessmentWeight = assessmentWeight;
     }
 }

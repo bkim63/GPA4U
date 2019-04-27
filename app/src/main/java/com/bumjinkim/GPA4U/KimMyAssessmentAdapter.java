@@ -57,10 +57,12 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
                                 break;
                             case 1:
                                 TinyDB tinyDB = new TinyDB(context);
-                                ArrayList<Object> assessments = tinyDB.getListObject("assessments", KimAssessment.class);
-                                assessments.remove(((KimAssessment)assessments.get(recyclerView.getChildAdapterPosition(v))));
+                                ArrayList<Object> asts = tinyDB.getListObject("assessments", KimAssessment.class);
+                                asts.remove(((KimAssessment)asts.get(recyclerView.getChildAdapterPosition(v))));
+                                tinyDB.putListObject("assessments", asts);
 
-                                tinyDB.putListObject("assessments", assessments);
+                                assessments = asts;
+
                                 notifyDataSetChanged();
 
                                 break;
