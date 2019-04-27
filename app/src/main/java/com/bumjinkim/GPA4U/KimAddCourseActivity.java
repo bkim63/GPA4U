@@ -83,7 +83,6 @@ public class KimAddCourseActivity extends AppCompatActivity {
             creditView.setSelection(course.credit - 1);
             gradeSystemView.setSelection(course.su ? 1 : 0);
 
-
             for (KimWeight o : weights) {
                 LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
                 textViewLayout.setOrientation(HORIZONTAL);
@@ -155,6 +154,11 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     realm.copyToRealmOrUpdate(c);
                     realm.commitTransaction();
                 }
+
+                realm.beginTransaction();
+                final RealmResults<KimWeight> results = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
+                results.deleteAllFromRealm();
+                realm.commitTransaction();
 
                 for (int i = 0; i < weightNameViews.size(); i++) {
                     realm.beginTransaction();

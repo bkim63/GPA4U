@@ -11,17 +11,21 @@ public class KimCalculateGrade {
     public static double calculateOverallGPA(ArrayList<KimCourse> courses) {
         double grade = 0.0;
         double totalCredit = 0.0;
-        for (Object course : courses) {
-            totalCredit += ((KimCourse) course).credit;
+        for (KimCourse course : courses) {
+            if (!course.su) {
+                totalCredit += ((KimCourse) course).credit;
+            }
         }
 
         Realm realm = Realm.getDefaultInstance();
         for (KimCourse course : courses) {
-            RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
-            RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
+            if (!course.su) {
+                RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
+                RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
 
-            grade += calculateGPAFromGrade(calculateCourseGPA(course, new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false)) * ((KimCourse) course).credit / totalCredit;
-            Log.d("GPA", String.valueOf(grade));
+                grade += calculateGPAFromGrade(calculateCourseGPA(course, new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false)) * ((KimCourse) course).credit / totalCredit;
+                Log.d("GPA", String.valueOf(grade));
+            }
         }
 
         return grade;
@@ -39,16 +43,20 @@ public class KimCalculateGrade {
         double grade = 0.0;
         double totalCredit = 0.0;
         for (KimCourse course : courses) {
-            totalCredit += ((KimCourse) course).credit;
+            if (!course.su) {
+                totalCredit += ((KimCourse) course).credit;
+            }
         }
 
         Realm realm = Realm.getDefaultInstance();
         for (KimCourse course : courses) {
-            RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
-            RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
+            if (!course.su) {
+                RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
+                RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
 
-            grade += calculateGPAFromGrade(calculateCourseGPA(course, new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), true)) * ((KimCourse) course).credit / totalCredit;
-            Log.d("GPA", String.valueOf(grade));
+                grade += calculateGPAFromGrade(calculateCourseGPA(course, new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), true)) * ((KimCourse) course).credit / totalCredit;
+                Log.d("GPA", String.valueOf(grade));
+            }
         }
 
         return grade;
