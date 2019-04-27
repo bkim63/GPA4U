@@ -6,7 +6,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +38,8 @@ public class KimAddCourseActivity extends AppCompatActivity {
     };
 
     private LinearLayout weightLayout;
+    private ArrayList<EditText> weightNameViews = new ArrayList<>();
+    private ArrayList<EditText> weightPercentViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +62,21 @@ public class KimAddCourseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TinyDB tinyDB = new TinyDB(KimAddCourseActivity.this);
                 ArrayList<Object> courses = tinyDB.getListObject("courses", KimCourse.class);
+                ArrayList<Object> weights = tinyDB.getListObject("weights", KimWeight.class);
 
                 KimCourse course = new KimCourse(String.valueOf(nameView.getText()), "No Grade", 3);
                 courses.add(course);
 
+                ArrayList<Object> weightArrayList = new ArrayList<>();
+
+                for (int i = 0; i < weightNameViews.size(); i++) {
+                    EditText weightPercentView = weightPercentViews.get(i);
+                    KimWeight weight = new KimWeight(String.valueOf(weightNameViews.get(i).getText()), Double.valueOf(String.valueOf(weightPercentView.getText())), course.id);
+                    weightArrayList.add(weight);
+                }
+
                 tinyDB.putListObject("courses", courses);
+                tinyDB.putListObject("weights", weightArrayList);
 
                 setResult(RESULT_OK);
                 finish();
@@ -79,8 +93,19 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textViewLayout.setLayoutParams(layoutParams);
 
-                TextView weightNameView = new TextView(KimAddCourseActivity.this);
-                TextView weightPercentView = new TextView(KimAddCourseActivity.this);
+                EditText weightNameView = new EditText(KimAddCourseActivity.this);
+                weightNameView.setLayoutParams(new LinearLayout.LayoutParams(
+                        300, 80
+                        ));
+                weightNameView.setText("Weight Name");
+                weightNameViews.add(weightNameView);
+
+                EditText weightPercentView = new EditText(KimAddCourseActivity.this);
+                weightPercentView.setLayoutParams(new LinearLayout.LayoutParams(
+                        300, 80
+                ));
+                weightPercentView.setText("90");
+                weightPercentViews.add(weightPercentView);
 
                 textViewLayout.addView(weightNameView);
                 textViewLayout.addView(weightPercentView);
