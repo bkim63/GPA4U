@@ -65,7 +65,7 @@
         android:layout_marginRight="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="What is your assessment grade?"
+        android:hint="What is the assessment grade?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/kim_add_assessment_name" />
@@ -81,7 +81,7 @@
         android:layout_marginRight="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="What is your assessment weight?"
+        android:hint="What is the assessment weight?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +95,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:spinnerMode="dropdown"
+        android:spinnerMode="dialog"
+        android:prompt="@string/weight_prompt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

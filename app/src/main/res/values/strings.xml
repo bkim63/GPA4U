@@ -7,4 +7,7 @@
     <string name="title_activity_kim_my_assessments">My Assessments</string>
     <string name="title_activity_kim_add_course">Add Course</string>
     <string name="title_activity_kim_add_assessment">Add Assessment</string>
+    <string name="credit_prompt">What is the course credit?</string>
+    <string name="grading_system_prompt">What is the grading system?</string>
+    <string name="weight_prompt">What is the weight name?</string>
 </resources>
