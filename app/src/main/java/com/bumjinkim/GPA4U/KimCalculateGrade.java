@@ -66,6 +66,8 @@ public class KimCalculateGrade {
         double grade = 0.0;
 
         for (int i = 0; i < weights.size(); i++) {
+            double tempGrade = 0.0;
+
             KimWeight weight = weights.get(i);
 
             int assessmentWeightTotal = 0;
@@ -81,10 +83,11 @@ public class KimCalculateGrade {
             }
 
             for (KimAssessment a : assessments) {
-                grade += a.grade * a.assessmentWeight / assessmentWeightTotal;
+                tempGrade += a.grade * a.assessmentWeight / assessmentWeightTotal;
             }
 
-            grade = grade * weight.percent / 100;
+            Log.d("GRADE CALCULATION", String.valueOf(tempGrade));
+            grade += tempGrade * weight.percent / 100;
         }
 
         double outOf = 0.0;
@@ -93,9 +96,11 @@ public class KimCalculateGrade {
             outOf += weight.percent;
         }
 
-        Log.d("GRADE CALCULATION", String.valueOf(outOf));
+        Log.d("GRADE CALCULATION", String.valueOf(grade));
 
-        grade = grade / (outOf / 100);
+        grade = grade / outOf * 100;
+
+        Log.d("GRADE CALCULATION", String.valueOf(grade));
 
         return grade;
     }
