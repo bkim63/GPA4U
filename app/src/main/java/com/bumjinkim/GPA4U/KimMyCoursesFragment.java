@@ -28,6 +28,8 @@ public class KimMyCoursesFragment extends Fragment {
     private KimMyCourseAdapter myCourseAdapter;
     private int kim_add_course_request_code = 1;
 
+    private RealmResults<KimAssessment> assessments;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentKimMyCourses = inflater.inflate(R.layout.fragment_kim_my_courses, container, false);
@@ -59,6 +61,15 @@ public class KimMyCoursesFragment extends Fragment {
         realm.addChangeListener(new RealmChangeListener<Realm>() {
             @Override
             public void onChange(Realm realm) {
+                gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<KimCourse>(courses))));
+                expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<KimCourse>(courses))));
+            }
+        });
+
+        assessments = realm.where(KimAssessment.class).findAll();
+        assessments.addChangeListener(new RealmChangeListener<RealmResults<KimAssessment>>() {
+            @Override
+            public void onChange(RealmResults<KimAssessment> kimAssessments) {
                 gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<KimCourse>(courses))));
                 expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<KimCourse>(courses))));
 
