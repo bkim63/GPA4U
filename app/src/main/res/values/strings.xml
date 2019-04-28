@@ -10,4 +10,5 @@
     <string name="credit_prompt">What is the course credit?</string>
     <string name="grading_system_prompt">What is the grading system?</string>
     <string name="weight_prompt">What is the weight name?</string>
+
 </resources>

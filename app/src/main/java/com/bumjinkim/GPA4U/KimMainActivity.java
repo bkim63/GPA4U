@@ -3,6 +3,7 @@ package com.bumjinkim.GPA4U;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -16,19 +17,23 @@ public class KimMainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment = null;
+
             switch (item.getItemId()) {
                 case R.id.navigation_my_courses:
-                    KimMyCoursesFragment kimMyCoursesFragment = new KimMyCoursesFragment();
-
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.main_fragment, kimMyCoursesFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    fragment = new KimMyCoursesFragment();
                 return true;
                 case R.id.navigation_my_gpa:
-
+                    fragment = new KimMyGPAFragment();
                     return true;
             }
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.main_fragment, fragment);
+            transaction.addToBackStack(null);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.commit();
+
             return false;
         }
     };
