@@ -37,7 +37,6 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             return false;
         }
     };
-    private ArrayList<KimWeight> courseWeights = new ArrayList<>();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -66,12 +65,31 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         final RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
         final RealmResults<KimCourse> courses = realm.where(KimCourse.class).equalTo("id", getIntent().getExtras().getLong("course")).findAll();
 
+        final Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
+
+        ArrayList<String> spinnerItems = new ArrayList();
+        for (KimWeight weight : weights) {
+            spinnerItems.add(weight.name);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, spinnerItems);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s.setAdapter(adapter);
+        s.setSelection(0);
+
         if (method.equals("edit")) {
             setTitle("Edit Assessment");
 
             final RealmResults<KimAssessment> asts = realm.where(KimAssessment.class).equalTo("id", getIntent().getExtras().getLong("assessment")).findAll();
-
             assessment = asts.get(0);
+
+            for (int i = 0; i < weights.size(); i++) {
+                if (assessment.weight.id.equals(weights.get(i).id)) {
+                    s.setSelection(i);
+                }
+            }
 
             nameView.setText(assessment.name);
             gradeView.setText(String.valueOf(assessment.grade));
@@ -83,18 +101,6 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         }
 
         if (weights.size() != 0) {
-            ArrayList<String> spinnerItems = new ArrayList();
-            for (KimWeight weight : weights) {
-                spinnerItems.add(weight.name);
-            }
-            final Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_spinner_item, spinnerItems);
-
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            s.setAdapter(adapter);
-            s.setSelection(0);
-
             Button saveButton = findViewById(R.id.kim_add_assessment_save_button);
 
             final KimAssessment finalAssessment = assessment;
