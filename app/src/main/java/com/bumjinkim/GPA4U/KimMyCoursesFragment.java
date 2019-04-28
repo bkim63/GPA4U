@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 import static android.app.Activity.RESULT_OK;
@@ -26,7 +27,6 @@ public class KimMyCoursesFragment extends Fragment {
     private LinearLayoutManager layoutManager;
     private KimMyCourseAdapter myCourseAdapter;
     private int kim_add_course_request_code = 1;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,7 +42,6 @@ public class KimMyCoursesFragment extends Fragment {
             }
         });
 
-
         recyclerView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_list_view);
         recyclerView.setHasFixedSize(true);
 
@@ -52,10 +51,22 @@ public class KimMyCoursesFragment extends Fragment {
         Realm realm = Realm.getDefaultInstance();
         final RealmResults<KimCourse> courses = realm.where(KimCourse.class).findAll();
 
-        TextView gpaView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_gpa_view);
-        TextView expectedGPAView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_expected_gpa_view);
+        final TextView gpaView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_gpa_view);
+        final TextView expectedGPAView = fragmentKimMyCourses.findViewById(R.id.kim_my_course_expected_gpa_view);
         gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<KimCourse>(courses))));
         expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<KimCourse>(courses))));
+
+        realm.addChangeListener(new RealmChangeListener<Realm>() {
+            @Override
+            public void onChange(Realm realm) {
+                gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<KimCourse>(courses))));
+                expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<KimCourse>(courses))));
+
+                RecyclerView.Adapter adapter = recyclerView.getAdapter();
+                recyclerView.setAdapter(null);
+                recyclerView.setAdapter(adapter);
+            }
+        });
 
         myCourseAdapter = new KimMyCourseAdapter(this.getActivity(), new ArrayList<KimCourse>(courses), recyclerView);
         recyclerView.setAdapter(myCourseAdapter);

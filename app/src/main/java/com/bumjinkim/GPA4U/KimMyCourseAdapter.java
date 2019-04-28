@@ -87,6 +87,7 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
                 return true;
             }
         });
+
         return new CourseViewHolder(mView);
     }
 
