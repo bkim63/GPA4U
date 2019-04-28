@@ -66,30 +66,29 @@ public class KimCalculateGrade {
         double grade = 0.0;
 
         for (int i = 0; i < weights.size(); i++) {
-            KimWeight weight = (KimWeight) weights.get(i);
+            KimWeight weight = weights.get(i);
 
-            int assessmentCount = 0;
-            double percent = 0.0;
+            int assessmentWeightTotal = 0;
 
-            for (Object a : assessments) {
-                KimAssessment assessment = (KimAssessment) a;
-
-
+            for (KimAssessment a : assessments) {
                 if (!expected) {
-                    if (!assessment.expected) {
-                        percent += assessment.grade;
-                        assessmentCount++;
+                    if (!a.expected) {
+                        assessmentWeightTotal+= a.assessmentWeight;
                     }
                 } else {
-                    percent += assessment.grade;
-                    assessmentCount++;
+                    assessmentWeightTotal+= a.assessmentWeight;
                 }
             }
 
-            grade += (percent / (assessmentCount * 100)) * 100 * weight.percent / 100;
+            for (KimAssessment a : assessments) {
+                grade += a.grade * a.assessmentWeight / assessmentWeightTotal;
+            }
+
+            grade = grade * weight.percent / 100;
         }
 
         double outOf = 0.0;
+
         for (KimWeight weight : weights) {
             outOf += weight.percent;
         }

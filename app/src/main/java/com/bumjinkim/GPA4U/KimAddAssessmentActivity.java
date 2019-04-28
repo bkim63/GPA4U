@@ -61,7 +61,6 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         KimAssessment assessment = null;
 
         final String method = getIntent().getExtras().getString("method");
-        final String assessmentId = getIntent().getExtras().getString("assessment");
         final Long courseId = getIntent().getExtras().getLong("course");
 
         final RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
