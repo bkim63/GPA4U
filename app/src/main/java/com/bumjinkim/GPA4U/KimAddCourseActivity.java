@@ -1,5 +1,6 @@
 package com.bumjinkim.GPA4U;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -93,23 +94,29 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
                 EditText weightNameView = new EditText(KimAddCourseActivity.this);
                 LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                        300, 80
+                        600, 80
                 );
-                textViewParams.setMargins(50, 30, 0, 50);
+                textViewParams.setMargins(50, 80, 0, 50);
                 weightNameView.setText(((KimWeight) o).name);
                 weightNameView.setLayoutParams(textViewParams);
                 weightNameView.setHint("Weight Name");
+                weightNameView.setTextColor(Color.BLACK);
+                weightNameView.setHintTextColor(Color.GRAY);
+
                 weightNameViews.add(weightNameView);
 
                 EditText weightPercentView = new EditText(KimAddCourseActivity.this);
                 LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                        300, 80
+                        600, 80
                 );
-                textViewParams2.setMargins(0, 30, 50, 50);
+                textViewParams2.setMargins(0, 80, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
                 weightNameView.setHint("90");
 
                 weightPercentView.setText(String.valueOf(((KimWeight) o).percent));
+                weightPercentView.setTextColor(Color.BLACK);
+                weightPercentView.setHintTextColor(Color.GRAY);
+
                 weightPercentViews.add(weightPercentView);
 
                 textViewLayout.addView(weightNameView);
@@ -188,7 +195,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
             }
         });
 
-        Button weightButton = findViewById(R.id.kim_add_course_add_weight_button);
+        final Button weightButton = findViewById(R.id.kim_add_course_add_weight_button);
         weightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,21 +207,26 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
                 EditText weightNameView = new EditText(KimAddCourseActivity.this);
                 LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                        300, 80
+                        600, 80
                 );
-                textViewParams.setMargins(50, 30, 0, 50);
+                textViewParams.setMargins(50, 80, 0, 50);
                 weightNameView.setLayoutParams(textViewParams);
                 weightNameView.setHint("Weight Name");
+                weightNameView.setTextColor(Color.BLACK);
+                weightNameView.setHintTextColor(Color.GRAY);
 
                 weightNameViews.add(weightNameView);
 
                 EditText weightPercentView = new EditText(KimAddCourseActivity.this);
                 LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                        300, 80
+                        600, 80
                 );
-                textViewParams2.setMargins(0, 30, 50, 50);
+                textViewParams2.setMargins(0, 80, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
                 weightPercentView.setHint("90");
+                weightPercentView.setTextColor(Color.BLACK);
+                weightPercentView.setHintTextColor(Color.GRAY);
+
                 weightPercentViews.add(weightPercentView);
 
                 textViewLayout.addView(weightNameView);
