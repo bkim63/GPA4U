@@ -92,30 +92,26 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textViewLayout.setLayoutParams(layoutParams);
 
-                EditText weightNameView = new EditText(KimAddCourseActivity.this);
+                EditText weightNameView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
                 LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                        600, 80
+                        650, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                textViewParams.setMargins(50, 80, 0, 50);
+                textViewParams.setMargins(50, 120, 0, 50);
                 weightNameView.setText(((KimWeight) o).name);
                 weightNameView.setLayoutParams(textViewParams);
                 weightNameView.setHint("Weight Name");
-                weightNameView.setTextColor(Color.BLACK);
-                weightNameView.setHintTextColor(Color.GRAY);
 
                 weightNameViews.add(weightNameView);
 
-                EditText weightPercentView = new EditText(KimAddCourseActivity.this);
+                EditText weightPercentView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
                 LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                        600, 80
+                        650, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                textViewParams2.setMargins(0, 80, 50, 50);
+                textViewParams2.setMargins(0, 120, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
                 weightNameView.setHint("90");
 
                 weightPercentView.setText(String.valueOf(((KimWeight) o).percent));
-                weightPercentView.setTextColor(Color.BLACK);
-                weightPercentView.setHintTextColor(Color.GRAY);
 
                 weightPercentViews.add(weightPercentView);
 
@@ -205,27 +201,23 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textViewLayout.setLayoutParams(layoutParams);
 
-                EditText weightNameView = new EditText(KimAddCourseActivity.this);
+                EditText weightNameView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
                 LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                        600, 80
+                        650, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                textViewParams.setMargins(50, 80, 0, 50);
+                textViewParams.setMargins(50, 120, 0, 50);
                 weightNameView.setLayoutParams(textViewParams);
                 weightNameView.setHint("Weight Name");
-                weightNameView.setTextColor(Color.BLACK);
-                weightNameView.setHintTextColor(Color.GRAY);
 
                 weightNameViews.add(weightNameView);
 
-                EditText weightPercentView = new EditText(KimAddCourseActivity.this);
+                EditText weightPercentView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
                 LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                        600, 80
+                        650, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                textViewParams2.setMargins(0, 80, 50, 50);
+                textViewParams2.setMargins(0, 120, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
                 weightPercentView.setHint("90");
-                weightPercentView.setTextColor(Color.BLACK);
-                weightPercentView.setHintTextColor(Color.GRAY);
 
                 weightPercentViews.add(weightPercentView);
 
