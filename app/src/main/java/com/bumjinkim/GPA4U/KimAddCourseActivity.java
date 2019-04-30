@@ -1,5 +1,6 @@
 package com.bumjinkim.GPA4U;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -94,7 +95,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
                 EditText weightNameView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
                 LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                        650, ViewGroup.LayoutParams.WRAP_CONTENT
+                        Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
                 textViewParams.setMargins(50, 120, 0, 50);
                 weightNameView.setText(((KimWeight) o).name);
@@ -105,7 +106,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
                 EditText weightPercentView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
                 LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                        650, ViewGroup.LayoutParams.WRAP_CONTENT
+                        Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
                 textViewParams2.setMargins(0, 120, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
@@ -203,7 +204,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
                 EditText weightNameView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
                 LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                        650, ViewGroup.LayoutParams.WRAP_CONTENT
+                        Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
                 textViewParams.setMargins(50, 120, 0, 50);
                 weightNameView.setLayoutParams(textViewParams);
@@ -213,7 +214,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
                 EditText weightPercentView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
                 LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                        650, ViewGroup.LayoutParams.WRAP_CONTENT
+                        Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
                 textViewParams2.setMargins(0, 120, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
