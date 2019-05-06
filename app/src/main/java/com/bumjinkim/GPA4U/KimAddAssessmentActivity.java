@@ -110,6 +110,10 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     KimAssessment ast = null;
 
+                    if (Double.valueOf(String.valueOf(gradeView.getText())) > 100 || Double.valueOf(String.valueOf(gradeView.getText())) < 0 || Double.valueOf(String.valueOf(weightView.getText())) > 100 || Double.valueOf(String.valueOf(weightView.getText())) < 0) {
+                        return;
+                    }
+
                     if (method.equals("edit")) {
                         realm.beginTransaction();
 

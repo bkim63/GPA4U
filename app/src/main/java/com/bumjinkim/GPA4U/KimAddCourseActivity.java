@@ -97,7 +97,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
                         Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                textViewParams.setMargins(50, 120, 0, 50);
+                textViewParams.setMargins(0, 50, 0, 50);
                 weightNameView.setText(((KimWeight) o).name);
                 weightNameView.setLayoutParams(textViewParams);
                 weightNameView.setHint("Weight Name");
@@ -108,7 +108,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
                         Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                textViewParams2.setMargins(0, 120, 50, 50);
+                textViewParams2.setMargins(0, 50, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
                 weightNameView.setHint("90");
 
@@ -132,6 +132,17 @@ public class KimAddCourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 KimCourse c = null;
+
+                double weightSum = 0.0;
+
+                for (int i = 0; i < weightNameViews.size(); i++) {
+                    EditText weightPercentView = weightPercentViews.get(i);
+                    weightSum += Double.valueOf(String.valueOf(weightPercentView.getText()));
+                }
+
+                if (weightSum > 100 || weightSum < 0) {
+                    return;
+                }
 
                 if (method.equals("edit")) {
                     realm.beginTransaction();
@@ -168,6 +179,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 results.deleteAllFromRealm();
                 realm.commitTransaction();
 
+
                 for (int i = 0; i < weightNameViews.size(); i++) {
                     realm.beginTransaction();
                     EditText weightPercentView = weightPercentViews.get(i);
@@ -183,6 +195,8 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     weight.name = String.valueOf(weightNameViews.get(i).getText());
                     weight.percent = Double.valueOf(String.valueOf(weightPercentView.getText()));
                     weight.course = c;
+                    weightSum += weight.percent;
+
                     realm.copyToRealmOrUpdate(weight);
                     realm.commitTransaction();
                 }
@@ -206,7 +220,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
                         Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                textViewParams.setMargins(50, 120, 0, 50);
+                textViewParams.setMargins(0, 50, 0, 50);
                 weightNameView.setLayoutParams(textViewParams);
                 weightNameView.setHint("Weight Name");
 
@@ -216,7 +230,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
                         Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
                 );
-                textViewParams2.setMargins(0, 120, 50, 50);
+                textViewParams2.setMargins(0, 50, 50, 50);
                 weightPercentView.setLayoutParams(textViewParams2);
                 weightPercentView.setHint("90");
 
