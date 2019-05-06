@@ -70,7 +70,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
         gradeSystemView.setSelection(0);
 
         KimCourse course = null;
-        int index = 0;
+
         final String method = getIntent().getExtras().getString("method");
         final long courseId = getIntent().getExtras().getLong("course");
 
@@ -131,7 +131,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KimCourse c = null;
+                KimCourse kimCourse = null;
 
                 double weightSum = 0.0;
 
@@ -150,14 +150,14 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     finalCourse.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
                     finalCourse.name = String.valueOf(nameView.getText());
                     finalCourse.su = gradeSystemView.getSelectedItemPosition() != 0;
-                    c = finalCourse;
+                    kimCourse = finalCourse;
 
                     realm.copyToRealmOrUpdate(finalCourse);
                     realm.commitTransaction();
                 } else {
                     realm.beginTransaction();
 
-                    c = new KimCourse();
+                    kimCourse = new KimCourse();
                     Number currentIdNum = realm.where(KimCourse.class).max("id");
                     long nextId;
                     if (currentIdNum == null) {
@@ -165,12 +165,12 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     } else {
                         nextId = currentIdNum.intValue() + 1;
                     }
-                    c.id = nextId;
-                    c.name = String.valueOf(nameView.getText());
-                    c.grade = "No Grade";
-                    c.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
-                    c.su = gradeSystemView.getSelectedItemPosition() != 0;
-                    realm.copyToRealmOrUpdate(c);
+                    kimCourse.id = nextId;
+                    kimCourse.name = String.valueOf(nameView.getText());
+                    kimCourse.grade = "No Grade";
+                    kimCourse.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
+                    kimCourse.su = gradeSystemView.getSelectedItemPosition() != 0;
+                    realm.copyToRealmOrUpdate(kimCourse);
                     realm.commitTransaction();
                 }
 
@@ -194,7 +194,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     weight.id = nextId;
                     weight.name = String.valueOf(weightNameViews.get(i).getText());
                     weight.percent = Double.valueOf(String.valueOf(weightPercentView.getText()));
-                    weight.course = c;
+                    weight.course = kimCourse;
                     weightSum += weight.percent;
 
                     realm.copyToRealmOrUpdate(weight);

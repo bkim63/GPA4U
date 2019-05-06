@@ -103,12 +103,12 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         if (weights.size() != 0) {
             Button saveButton = findViewById(R.id.kim_add_assessment_save_button);
 
-            final KimAssessment finalAssessment = assessment;
+            final KimAssessment savedAssessment = assessment;
 
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    KimAssessment ast = null;
+                    KimAssessment kimAssessment = null;
 
                     if (Double.valueOf(String.valueOf(gradeView.getText())) > 100 || Double.valueOf(String.valueOf(gradeView.getText())) < 0 || Double.valueOf(String.valueOf(weightView.getText())) > 100 || Double.valueOf(String.valueOf(weightView.getText())) < 0) {
                         return;
@@ -117,18 +117,18 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                     if (method.equals("edit")) {
                         realm.beginTransaction();
 
-                        finalAssessment.grade = Double.valueOf(String.valueOf(gradeView.getText()));
-                        finalAssessment.name = String.valueOf(nameView.getText());
-                        finalAssessment.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
-                        finalAssessment.expected = expectedView.isSelected();
-                        finalAssessment.weight = weights.get(s.getSelectedItemPosition());
+                        savedAssessment.grade = Double.valueOf(String.valueOf(gradeView.getText()));
+                        savedAssessment.name = String.valueOf(nameView.getText());
+                        savedAssessment.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
+                        savedAssessment.expected = expectedView.isSelected();
+                        savedAssessment.weight = weights.get(s.getSelectedItemPosition());
 
-                        realm.copyToRealmOrUpdate(finalAssessment);
+                        realm.copyToRealmOrUpdate(savedAssessment);
                         realm.commitTransaction();
                     } else {
                         realm.beginTransaction();
 
-                        ast = new KimAssessment();
+                        kimAssessment = new KimAssessment();
 
                         Number currentIdNum = realm.where(KimAssessment.class).max("id");
 
@@ -138,15 +138,15 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                         } else {
                             nextId = currentIdNum.intValue() + 1;
                         }
-                        ast.id = nextId;
-                        ast.expected = expectedView.isChecked();
-                        ast.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
-                        ast.grade = Double.valueOf(String.valueOf(gradeView.getText()));
-                        ast.course = courses.get(0);
-                        ast.name = String.valueOf(nameView.getText());
-                        ast.weight = weights.get(s.getSelectedItemPosition());
+                        kimAssessment.id = nextId;
+                        kimAssessment.expected = expectedView.isChecked();
+                        kimAssessment.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
+                        kimAssessment.grade = Double.valueOf(String.valueOf(gradeView.getText()));
+                        kimAssessment.course = courses.get(0);
+                        kimAssessment.name = String.valueOf(nameView.getText());
+                        kimAssessment.weight = weights.get(s.getSelectedItemPosition());
 
-                        realm.copyToRealmOrUpdate(ast);
+                        realm.copyToRealmOrUpdate(kimAssessment);
                         realm.commitTransaction();
                     }
 
