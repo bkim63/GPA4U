@@ -73,6 +73,12 @@ public class KimMyCoursesFragment extends Fragment {
             expectedGPAView.setVisibility(View.INVISIBLE);
         }
 
+        boolean push = preferences.getBoolean("push", true);
+        if (push) {
+            sendGPAPush(courses);
+            sendExpectedGPAPush(courses);
+        }
+
         SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -95,50 +101,15 @@ public class KimMyCoursesFragment extends Fragment {
         realm.addChangeListener(new RealmChangeListener<Realm>() {
             @Override
             public void onChange(Realm realm) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimMyCoursesFragment.this.getContext());
+                boolean push = preferences.getBoolean("push", true);
+                if (push) {
+                    sendGPAPush(courses);
+                    sendExpectedGPAPush(courses);
+                }
+
                 gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses))));
                 expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<>(courses))));
-
-                if (KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses)) < 3.00) {
-                    Intent intent = new Intent(getContext(), KimMyCoursesFragment.class);
-                    PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-
-                    builder.setAutoCancel(true)
-                            .setDefaults(Notification.DEFAULT_ALL)
-                            .setWhen(System.currentTimeMillis())
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setTicker("GPA4U")
-                            .setContentTitle("GPA is low right now.")
-                            .setContentText("GPA is currently below 3.00. Study until hip gets ripped off.")
-                            .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                            .setContentIntent(contentIntent)
-                            .setContentInfo("Info");
-
-                    NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(1, builder.build());
-                }
-
-                if (KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<>(courses)) < 3.00) {
-                    Intent intent = new Intent(getContext(), KimMyCoursesFragment.class);
-                    PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-
-                    builder.setAutoCancel(true)
-                            .setDefaults(Notification.DEFAULT_ALL)
-                            .setWhen(System.currentTimeMillis())
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setTicker("GPA4U")
-                            .setContentTitle("Expected GPA is low right now.")
-                            .setContentText("Expected GPA is currently below 3.00. Study until hip gets ripped off.")
-                            .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                            .setContentIntent(contentIntent)
-                            .setContentInfo("Info");
-
-                    NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(1, builder.build());
-                }
             }
         });
 
@@ -149,46 +120,11 @@ public class KimMyCoursesFragment extends Fragment {
                 gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses))));
                 expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<>(courses))));
 
-                if (KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses)) < 3.00) {
-                    Intent intent = new Intent(getContext(), KimMyCoursesFragment.class);
-                    PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-
-                    builder.setAutoCancel(true)
-                            .setDefaults(Notification.DEFAULT_ALL)
-                            .setWhen(System.currentTimeMillis())
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setTicker("GPA4U")
-                            .setContentTitle("GPA is low right now.")
-                            .setContentText("GPA is currently below 3.00. Study until hip gets ripped off.")
-                            .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                            .setContentIntent(contentIntent)
-                            .setContentInfo("Info");
-
-                    NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(1, builder.build());
-                }
-
-                if (KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses)) < 3.00) {
-                    Intent intent = new Intent(getContext(), KimMyCoursesFragment.class);
-                    PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-
-                    builder.setAutoCancel(true)
-                            .setDefaults(Notification.DEFAULT_ALL)
-                            .setWhen(System.currentTimeMillis())
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setTicker("GPA4U")
-                            .setContentTitle("Expected GPA is low right now.")
-                            .setContentText("Expected GPA is currently below 3.00. Study until hip gets ripped off.")
-                            .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                            .setContentIntent(contentIntent)
-                            .setContentInfo("Info");
-
-                    NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(1, builder.build());
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimMyCoursesFragment.this.getContext());
+                boolean push = preferences.getBoolean("push", true);
+                if (push) {
+                    sendGPAPush(courses);
+                    sendExpectedGPAPush(courses);
                 }
 
                 Realm realm = Realm.getDefaultInstance();
@@ -202,6 +138,52 @@ public class KimMyCoursesFragment extends Fragment {
         recyclerView.setAdapter(myCourseAdapter);
 
         return fragmentKimMyCourses;
+    }
+
+    private void sendGPAPush(RealmResults<KimCourse> courses) {
+        if (KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses)) < 3.00) {
+            Intent intent = new Intent(getContext(), KimMyCoursesFragment.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
+
+            builder.setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setTicker("GPA4U")
+                    .setContentTitle("GPA is low right now.")
+                    .setContentText("GPA is currently below 3.00. Study until hip gets ripped off.")
+                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                    .setContentIntent(contentIntent)
+                    .setContentInfo("Info");
+
+            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(1, builder.build());
+        }
+    }
+
+    private void sendExpectedGPAPush(RealmResults<KimCourse> courses) {
+        if (KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<>(courses)) < 3.00) {
+            Intent intent = new Intent(getContext(), KimMyCoursesFragment.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
+
+            builder.setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setTicker("GPA4U")
+                    .setContentTitle("Expected GPA is low right now.")
+                    .setContentText("Expected GPA is currently below 3.00. Study until hip gets ripped off.")
+                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                    .setContentIntent(contentIntent)
+                    .setContentInfo("Info");
+
+            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(1, builder.build());
+        }
     }
 
     @Override
