@@ -1,6 +1,8 @@
 package com.bumjinkim.GPA4U;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +58,14 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         final CheckBox expectedView = findViewById(R.id.kim_add_assessment_expected);
         final TextView weightView = findViewById(R.id.kim_add_assessment_weight);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean expected = preferences.getBoolean("expected", true);
+        if (expected) {
+            expectedView.setVisibility(View.VISIBLE);
+        } else {
+            expectedView.setVisibility(View.INVISIBLE);
+        }
+
         KimAssessment assessment = null;
 
         final String method = getIntent().getExtras().getString("method", "add");
@@ -81,8 +91,8 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         if (method.equals("edit")) {
             setTitle("Edit Assessment");
 
-            final RealmResults<KimAssessment> asts = realm.where(KimAssessment.class).equalTo("id", getIntent().getExtras().getLong("assessment")).findAll();
-            assessment = asts.get(0);
+            final RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("id", getIntent().getExtras().getLong("assessment")).findAll();
+            assessment = assessments.get(0);
 
             for (int i = 0; i < weights.size(); i++) {
                 if (assessment.weight.id.equals(weights.get(i).id)) {

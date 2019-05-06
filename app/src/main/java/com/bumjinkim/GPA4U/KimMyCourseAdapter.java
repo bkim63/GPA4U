@@ -3,6 +3,8 @@ package com.bumjinkim.GPA4U;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
@@ -97,6 +99,14 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
             courseViewHolder.gradeView.setText(String.format("S/U Grade %s", KimCalculateGrade.calculateSUGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false))));
         } else {
             courseViewHolder.gradeView.setText(String.format("Letter Grade %s", KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false))));
+        }
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean expected = preferences.getBoolean("credit", true);
+        if (expected) {
+            courseViewHolder.creditView.setVisibility(View.VISIBLE);
+        } else {
+            courseViewHolder.creditView.setVisibility(View.INVISIBLE);
         }
 
         courseViewHolder.creditView.setText(String.valueOf(courses.get(i).credit));
