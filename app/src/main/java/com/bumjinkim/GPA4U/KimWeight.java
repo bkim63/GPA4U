@@ -1,6 +1,5 @@
 package com.bumjinkim.GPA4U;
 
-import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 

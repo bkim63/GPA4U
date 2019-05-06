@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -52,7 +51,7 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
                             case 0:
                                 Intent editIntent = new Intent(context, KimAddAssessmentActivity.class);
                                 editIntent.putExtra("method", "edit");
-                                editIntent.putExtra("assessment", ((KimAssessment)assessments.get(recyclerView.getChildAdapterPosition(v))).id);
+                                editIntent.putExtra("assessment", assessments.get(recyclerView.getChildAdapterPosition(v)).id);
                                 editIntent.putExtra("course", courseId);
                                 ((AppCompatActivity)context).startActivityForResult(editIntent, kim_add_assessment_request_code);
                                 break;
@@ -60,7 +59,7 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.beginTransaction();
 
-                                final RealmResults<KimAssessment> results = realm.where(KimAssessment.class).equalTo("id", ((KimAssessment)assessments.get(recyclerView.getChildAdapterPosition(v))).id).findAll();
+                                final RealmResults<KimAssessment> results = realm.where(KimAssessment.class).equalTo("id", assessments.get(recyclerView.getChildAdapterPosition(v)).id).findAll();
                                 results.deleteAllFromRealm();
 
                                 realm.commitTransaction();
@@ -82,8 +81,8 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
 
     @Override
     public void onBindViewHolder(@NonNull KimMyAssessmentViewHolder kimMyAssessmentViewHolder, int i) {
-        kimMyAssessmentViewHolder.nameView.setText(((KimAssessment)this.assessments.get(i)).name);
-        kimMyAssessmentViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(((KimAssessment)this.assessments.get(i)).grade));
+        kimMyAssessmentViewHolder.nameView.setText(this.assessments.get(i).name);
+        kimMyAssessmentViewHolder.gradeView.setText(KimCalculateGrade.calculateCourseLetterGrade(this.assessments.get(i).grade));
     }
 
     @Override

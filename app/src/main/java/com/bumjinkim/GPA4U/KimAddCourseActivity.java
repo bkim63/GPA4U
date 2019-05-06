@@ -1,7 +1,6 @@
 package com.bumjinkim.GPA4U;
 
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -87,39 +85,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
             gradeSystemView.setSelection(course.su ? 1 : 0);
 
             for (KimWeight o : weights) {
-                LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
-                textViewLayout.setOrientation(HORIZONTAL);
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                textViewLayout.setLayoutParams(layoutParams);
-
-                EditText weightNameView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
-                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                        Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                textViewParams.setMargins(0, 50, 0, 50);
-                weightNameView.setText(((KimWeight) o).name);
-                weightNameView.setLayoutParams(textViewParams);
-                weightNameView.setHint("Weight Name");
-
-                weightNameViews.add(weightNameView);
-
-                EditText weightPercentView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
-                LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                        Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                textViewParams2.setMargins(0, 50, 50, 50);
-                weightPercentView.setLayoutParams(textViewParams2);
-                weightNameView.setHint("90");
-
-                weightPercentView.setText(String.valueOf(((KimWeight) o).percent));
-
-                weightPercentViews.add(weightPercentView);
-
-                textViewLayout.addView(weightNameView);
-                textViewLayout.addView(weightPercentView);
-
-                weightLayout.addView(textViewLayout);
+                createWeightEditText(o);
             }
 
         } else {
@@ -127,7 +93,9 @@ public class KimAddCourseActivity extends AppCompatActivity {
         }
 
         Button saveButton = findViewById(R.id.kim_add_course_save_button);
+
         final KimCourse finalCourse = course;
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +105,10 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
                 for (int i = 0; i < weightNameViews.size(); i++) {
                     EditText weightPercentView = weightPercentViews.get(i);
+                    if (TextUtils.isEmpty(weightPercentView.getText())) {
+                        return;
+                    }
+
                     weightSum += Double.valueOf(String.valueOf(weightPercentView.getText()));
                 }
 
@@ -179,13 +151,15 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 results.deleteAllFromRealm();
                 realm.commitTransaction();
 
-
                 for (int i = 0; i < weightNameViews.size(); i++) {
                     realm.beginTransaction();
+
                     EditText weightPercentView = weightPercentViews.get(i);
                     KimWeight weight = new KimWeight();
                     Number currentIdNum = realm.where(KimWeight.class).max("id");
+
                     long nextId;
+
                     if (currentIdNum == null) {
                         nextId = 1;
                     } else {
@@ -210,38 +184,49 @@ public class KimAddCourseActivity extends AppCompatActivity {
         weightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
-                textViewLayout.setOrientation(HORIZONTAL);
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                textViewLayout.setLayoutParams(layoutParams);
-
-                EditText weightNameView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
-                LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                        Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                textViewParams.setMargins(0, 50, 0, 50);
-                weightNameView.setLayoutParams(textViewParams);
-                weightNameView.setHint("Weight Name");
-
-                weightNameViews.add(weightNameView);
-
-                EditText weightPercentView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
-                LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
-                        Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                textViewParams2.setMargins(0, 50, 50, 50);
-                weightPercentView.setLayoutParams(textViewParams2);
-                weightPercentView.setHint("90");
-
-                weightPercentViews.add(weightPercentView);
-
-                textViewLayout.addView(weightNameView);
-                textViewLayout.addView(weightPercentView);
-
-                weightLayout.addView(textViewLayout);
+                createWeightEditText(null);
             }
         });
+    }
+
+    private void createWeightEditText(KimWeight o) {
+        LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
+        textViewLayout.setOrientation(HORIZONTAL);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textViewLayout.setLayoutParams(layoutParams);
+
+        EditText weightNameView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
+        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
+                Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        textViewParams.setMargins(0, 50, 0, 50);
+        if (o != null) {
+            weightNameView.setText(o.name);
+        }
+        weightNameView.setLayoutParams(textViewParams);
+        weightNameView.setHint("Weight Name");
+
+        weightNameViews.add(weightNameView);
+
+        EditText weightPercentView = (EditText) getLayoutInflater().inflate(R.layout.kim_edit_text, null);
+        LinearLayout.LayoutParams textViewParams2 = new LinearLayout.LayoutParams(
+                Resources.getSystem().getDisplayMetrics().widthPixels / 2, ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        textViewParams2.setMargins(0, 50, 50, 50);
+        weightPercentView.setLayoutParams(textViewParams2);
+        weightPercentView.setHint("90");
+
+        if (o != null) {
+            weightPercentView.setText(String.valueOf(o.percent));
+        }
+
+        weightPercentViews.add(weightPercentView);
+
+        textViewLayout.addView(weightNameView);
+        textViewLayout.addView(weightPercentView);
+
+        weightLayout.addView(textViewLayout);
     }
 
     @Override

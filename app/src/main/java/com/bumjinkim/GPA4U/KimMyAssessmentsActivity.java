@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -79,7 +78,7 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
         kimMyAssessmentAdapter = new KimMyAssessmentAdapter(this, getIntent().getExtras().getLong("course"), this.assessments, recyclerView);
         recyclerView.setAdapter(kimMyAssessmentAdapter);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 

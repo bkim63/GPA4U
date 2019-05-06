@@ -73,9 +73,10 @@ public class KimMyCoursesFragment extends Fragment {
                 gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<KimCourse>(courses))));
                 expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<KimCourse>(courses))));
 
-                RecyclerView.Adapter adapter = recyclerView.getAdapter();
-                recyclerView.setAdapter(null);
-                recyclerView.setAdapter(adapter);
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<KimCourse> courses = realm.where(KimCourse.class).findAll();
+
+                myCourseAdapter.updateAdapter(new ArrayList<KimCourse>(courses));
             }
         });
 

@@ -17,7 +17,7 @@ public class KimMainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment = null;
+            Fragment fragment = new KimMyCoursesFragment();
 
             switch (item.getItemId()) {
                 case R.id.navigation_my_courses:

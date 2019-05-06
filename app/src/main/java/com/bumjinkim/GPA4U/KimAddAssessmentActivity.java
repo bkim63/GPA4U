@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -47,7 +46,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         final Realm realm = Realm.getDefaultInstance();
@@ -59,13 +58,13 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
 
         KimAssessment assessment = null;
 
-        final String method = getIntent().getExtras().getString("method");
+        final String method = getIntent().getExtras().getString("method", "add");
         final Long courseId = getIntent().getExtras().getLong("course");
 
         final RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
         final RealmResults<KimCourse> courses = realm.where(KimCourse.class).equalTo("id", getIntent().getExtras().getLong("course")).findAll();
 
-        final Spinner s = (Spinner) findViewById(R.id.kim_add_assessment_type);
+        final Spinner spinner = findViewById(R.id.kim_add_assessment_type);
 
         ArrayList<String> spinnerItems = new ArrayList();
         for (KimWeight weight : weights) {
@@ -76,8 +75,8 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, spinnerItems);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        s.setAdapter(adapter);
-        s.setSelection(0);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0);
 
         if (method.equals("edit")) {
             setTitle("Edit Assessment");
@@ -87,7 +86,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
 
             for (int i = 0; i < weights.size(); i++) {
                 if (assessment.weight.id.equals(weights.get(i).id)) {
-                    s.setSelection(i);
+                    spinner.setSelection(i);
                 }
             }
 
@@ -110,6 +109,10 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     KimAssessment kimAssessment = null;
 
+                    if (TextUtils.isEmpty(gradeView.getText()) || TextUtils.isEmpty(weightView.getText())) {
+                        return;
+                    }
+
                     if (Double.valueOf(String.valueOf(gradeView.getText())) > 100 || Double.valueOf(String.valueOf(gradeView.getText())) < 0 || Double.valueOf(String.valueOf(weightView.getText())) > 100 || Double.valueOf(String.valueOf(weightView.getText())) < 0) {
                         return;
                     }
@@ -121,7 +124,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                         savedAssessment.name = String.valueOf(nameView.getText());
                         savedAssessment.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
                         savedAssessment.expected = expectedView.isSelected();
-                        savedAssessment.weight = weights.get(s.getSelectedItemPosition());
+                        savedAssessment.weight = weights.get(spinner.getSelectedItemPosition());
 
                         realm.copyToRealmOrUpdate(savedAssessment);
                         realm.commitTransaction();
@@ -144,7 +147,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                         kimAssessment.grade = Double.valueOf(String.valueOf(gradeView.getText()));
                         kimAssessment.course = courses.get(0);
                         kimAssessment.name = String.valueOf(nameView.getText());
-                        kimAssessment.weight = weights.get(s.getSelectedItemPosition());
+                        kimAssessment.weight = weights.get(spinner.getSelectedItemPosition());
 
                         realm.copyToRealmOrUpdate(kimAssessment);
                         realm.commitTransaction();
