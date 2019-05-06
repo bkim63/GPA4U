@@ -3,21 +3,29 @@
     package="com.bumjinkim.GPA4U">
 
     <application
+        android:name=".KimApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".KimApplication"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".KimSettingsActivity"
+            android:label="@string/title_activity_kim_settings"
+            android:parentActivityName=".KimMainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bumjinkim.GPA4U.KimMainActivity" />
+        </activity>
+        <activity
             android:name=".KimAddAssessmentActivity"
-            android:theme="@style/AppTheme"
-            android:label="@string/title_activity_kim_add_assessment"></activity>
+            android:label="@string/title_activity_kim_add_assessment"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".KimAddCourseActivity"
-            android:theme="@style/AppTheme"
-            android:label="@string/title_activity_kim_add_course" />
+            android:label="@string/title_activity_kim_add_course"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".KimMyAssessmentsActivity"
             android:label="@string/title_activity_kim_my_assessments" />
