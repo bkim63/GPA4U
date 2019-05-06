@@ -22,17 +22,17 @@
 
         <SwitchPreference
             android:defaultValue="true"
-            android:key="notifications_new_message"
+            android:key="show_expected_gpa"
             android:title="Show Expected GPA" />
 
         <SwitchPreference
             android:defaultValue="true"
-            android:key="notifications_new_message"
+            android:key="show_decimal_percent"
             android:title="Show Decimal in Percent" />
 
         <SwitchPreference
             android:defaultValue="true"
-            android:key="notifications_new_message"
+            android:key="show_credits"
             android:title="Show Credits" />
     </PreferenceCategory>
 

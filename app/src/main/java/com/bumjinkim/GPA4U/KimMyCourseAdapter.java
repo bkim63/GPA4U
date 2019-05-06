@@ -102,7 +102,7 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
         }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean expected = preferences.getBoolean("credit", true);
+        boolean expected = preferences.getBoolean("show_credits", true);
         if (expected) {
             courseViewHolder.creditView.setVisibility(View.VISIBLE);
         } else {

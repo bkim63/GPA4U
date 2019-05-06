@@ -59,7 +59,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         final TextView weightView = findViewById(R.id.kim_add_assessment_weight);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean expected = preferences.getBoolean("expected", true);
+        boolean expected = preferences.getBoolean("show_expected_gpa", true);
         if (expected) {
             expectedView.setVisibility(View.VISIBLE);
         } else {

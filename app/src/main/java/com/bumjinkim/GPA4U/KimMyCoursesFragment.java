@@ -70,15 +70,15 @@ public class KimMyCoursesFragment extends Fragment {
         expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<>(courses))));
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-        boolean expected = preferences.getBoolean("expected", true);
-        if (expected) {
+        boolean showExpectedGPA = preferences.getBoolean("show_expected_gpa", true);
+        if (showExpectedGPA) {
             expectedGPAView.setVisibility(View.VISIBLE);
         } else {
             expectedGPAView.setVisibility(View.INVISIBLE);
         }
 
-        boolean push = preferences.getBoolean("push", true);
-        if (push) {
+        boolean allNotifications = preferences.getBoolean("all_notifications", true);
+        if (allNotifications) {
             sendGPAPush(courses);
             sendExpectedGPAPush(courses);
         }
@@ -87,8 +87,8 @@ public class KimMyCoursesFragment extends Fragment {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimMyCoursesFragment.this.getContext());
-                boolean expected = preferences.getBoolean("expected", true);
-                if (expected) {
+                boolean showExpected = preferences.getBoolean("show_expected_gpa", true);
+                if (showExpected) {
                     expectedGPAView.setVisibility(View.VISIBLE);
                 } else {
                     expectedGPAView.setVisibility(View.INVISIBLE);
@@ -106,10 +106,17 @@ public class KimMyCoursesFragment extends Fragment {
             @Override
             public void onChange(Realm realm) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimMyCoursesFragment.this.getContext());
-                boolean push = preferences.getBoolean("push", true);
-                if (push) {
-                    sendGPAPush(courses);
-                    sendExpectedGPAPush(courses);
+                boolean allNotification = preferences.getBoolean("all_notifications", true);
+                boolean gpaNotification = preferences.getBoolean("gpa_notifications", true);
+                boolean expectedGPANotification = preferences.getBoolean("expected_gpa_notifications", true);
+
+                if (allNotification) {
+                    if (gpaNotification) {
+                        sendGPAPush(courses);
+                    }
+                    if (expectedGPANotification) {
+                        sendExpectedGPAPush(courses);
+                    }
                 }
 
                 gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses))));
@@ -125,10 +132,17 @@ public class KimMyCoursesFragment extends Fragment {
                 expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<>(courses))));
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimMyCoursesFragment.this.getContext());
-                boolean push = preferences.getBoolean("push", true);
-                if (push) {
-                    sendGPAPush(courses);
-                    sendExpectedGPAPush(courses);
+                boolean allNotification = preferences.getBoolean("all_notifications", true);
+                boolean gpaNotification = preferences.getBoolean("gpa_notifications", true);
+                boolean expectedGPANotification = preferences.getBoolean("expected_gpa_notifications", true);
+
+                if (allNotification) {
+                    if (gpaNotification) {
+                        sendGPAPush(courses);
+                    }
+                    if (expectedGPANotification) {
+                        sendExpectedGPAPush(courses);
+                    }
                 }
 
                 Realm realm = Realm.getDefaultInstance();

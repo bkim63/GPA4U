@@ -3,22 +3,19 @@ package com.bumjinkim.GPA4U;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
+import android.preference.SwitchPreference;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
-import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -42,45 +39,10 @@ public class KimSettingsActivity extends AppCompatPreferenceActivity {
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            preference.setSummary(stringValue);
 
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
-
-            } else if (preference instanceof RingtonePreference) {
-                // For ringtone preferences, look up the correct display value
-                // using RingtoneManager.
-                if (TextUtils.isEmpty(stringValue)) {
-                    // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
-
-                } else {
-                    Ringtone ringtone = RingtoneManager.getRingtone(
-                            preference.getContext(), Uri.parse(stringValue));
-
-                    if (ringtone == null) {
-                        // Clear the summary if there was a lookup error.
-                        preference.setSummary(null);
-                    } else {
-                        // Set the summary to reflect the new ringtone display
-                        // name.
-                        String name = ringtone.getTitle(preference.getContext());
-                        preference.setSummary(name);
-                    }
-                }
-
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
-            }
             return true;
         }
     };
@@ -119,7 +81,114 @@ public class KimSettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+
+        addPreferencesFromResource(R.xml.pref_general);
+
         this.getFragmentManager().beginTransaction().replace(android.R.id.content, new GeneralPreferenceFragment()).commit();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimSettingsActivity.this);
+
+        final SwitchPreference soundNotificationsSwitch = (SwitchPreference) findPreference("all_notifications");
+        soundNotificationsSwitch.setChecked(preferences.getBoolean("all_notifications", true));
+
+        soundNotificationsSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimSettingsActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+
+                editor.putBoolean("all_notifications", soundNotificationsSwitch.isChecked());
+                editor.apply();
+
+                return false;
+            }
+        });
+
+        final SwitchPreference lowGPASwitch = (SwitchPreference) findPreference("gpa_notifications");
+        lowGPASwitch.setChecked(preferences.getBoolean("gpa_notifications", true));
+
+        lowGPASwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimSettingsActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+
+                editor.putBoolean("gpa_notifications", lowGPASwitch.isChecked());
+                editor.apply();
+
+                return false;
+            }
+        });
+
+        final SwitchPreference lowExpectedGPASwitch = (SwitchPreference) findPreference("expected_gpa_notifications");
+        lowExpectedGPASwitch.setChecked(preferences.getBoolean("expected_gpa_notifications", true));
+
+        lowExpectedGPASwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimSettingsActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+
+                editor.putBoolean("expected_gpa_notifications", lowExpectedGPASwitch.isChecked());
+                editor.apply();
+
+                return false;
+            }
+        });
+
+        final SwitchPreference expectedGPASwitch = (SwitchPreference) findPreference("show_expected_gpa");
+        expectedGPASwitch.setChecked(preferences.getBoolean("show_expected_gpa", true));
+
+        expectedGPASwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimSettingsActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+
+                editor.putBoolean("show_expected_gpa", expectedGPASwitch.isChecked());
+                editor.apply();
+
+                return false;
+            }
+        });
+
+        final SwitchPreference decimalPercentSwitch = (SwitchPreference) findPreference("show_decimal_percent");
+        decimalPercentSwitch.setChecked(preferences.getBoolean("show_decimal_percent", true));
+
+        decimalPercentSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimSettingsActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+
+                editor.putBoolean("show_decimal_percent", decimalPercentSwitch.isChecked());
+                editor.apply();
+
+                return false;
+            }
+        });
+
+        final SwitchPreference creditSwitch = (SwitchPreference) findPreference("show_credits");
+        creditSwitch.setChecked(preferences.getBoolean("show_credits", true));
+
+        creditSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimSettingsActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+
+                editor.putBoolean("show_credits", creditSwitch.isChecked());
+                editor.apply();
+
+                return false;
+            }
+        });
     }
 
     /**
