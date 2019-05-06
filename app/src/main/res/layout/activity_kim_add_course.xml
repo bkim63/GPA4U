@@ -7,20 +7,6 @@
     android:background="@color/white"
     tools:context=".KimAddCourseActivity">
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="@color/colorPrimary"
-        app:itemIconTint="#FFFFFF"
-        app:itemTextColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,7 +16,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:paddingBottom="?attr/actionBarSize"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -53,8 +38,8 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:entries="@array/kimAddCourseCredits"
-                    android:spinnerMode="dialog"
                     android:prompt="@string/credit_prompt"
+                    android:spinnerMode="dialog"
                     app:layout_constraintEnd_toStartOf="@+id/kim_add_class_class_name"
                     app:layout_constraintHorizontal_bias="0.63"
                     app:layout_constraintStart_toStartOf="parent"
@@ -67,8 +52,8 @@
                     android:layout_marginTop="28dp"
                     android:layout_marginEnd="28dp"
                     android:layout_marginRight="28dp"
-                    android:hint="Class Name"
                     android:ems="10"
+                    android:hint="Class Name"
                     android:inputType="textPersonName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -86,8 +71,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="40dp"
                 android:entries="@array/kimAddCourseGradingSystem"
-                android:spinnerMode="dialog"
                 android:prompt="@string/grading_system_prompt"
+                android:spinnerMode="dialog"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.466"
                 app:layout_constraintStart_toStartOf="parent"

@@ -28,12 +28,12 @@ public class KimMyGPAFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentGPA = inflater.inflate(R.layout.fragment_kim_my_gpa, container, false);
+        View view = inflater.inflate(R.layout.fragment_kim_my_gpa, container, false);
 
         Realm realm = Realm.getDefaultInstance();
         final RealmResults<KimCourse> courses = realm.where(KimCourse.class).findAll();
 
-        PieView pieView = fragmentGPA.findViewById(R.id.pie_view);
+        PieView pieView = view.findViewById(R.id.pie_view);
         ArrayList<PieHelper> pieHelperArrayList = new ArrayList<>();
 
         double totalGrades = 0.0;
@@ -49,13 +49,12 @@ public class KimMyGPAFragment extends Fragment {
         }
 
         pieView.setDate(pieHelperArrayList);
-        pieView.selectedPie(2);
         pieView.showPercentLabel(true);
 
-        TextView textView = fragmentGPA.findViewById(R.id.text_view);
-        textView.setText(String.format("GPA %s", KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses))));
+        TextView textView = view.findViewById(R.id.text_view);
+        textView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses))));
 
-        BarView barView = fragmentGPA.findViewById(R.id.bar_view);
+        BarView barView = view.findViewById(R.id.bar_view);
 
         ArrayList<String> bottomTextList = new ArrayList<>();
         ArrayList<Integer> dataList = new ArrayList<>();
@@ -67,7 +66,7 @@ public class KimMyGPAFragment extends Fragment {
         barView.setBottomTextList(bottomTextList);
         barView.setDataList(dataList,100);
 
-        return fragmentGPA;
+        return view;
     }
 
     @Override

@@ -25,22 +25,22 @@ import static android.widget.LinearLayout.HORIZONTAL;
 
 public class KimAddCourseActivity extends AppCompatActivity {
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_my_courses:
-                    finish();
-                    return true;
-                case R.id.navigation_my_gpa:
-
-                    return true;
-            }
-            return false;
-        }
-    };
+//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+//
+//        @Override
+//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//            switch (item.getItemId()) {
+//                case R.id.navigation_my_courses:
+//                    finish();
+//                    return true;
+//                case R.id.navigation_my_gpa:
+//
+//                    return true;
+//            }
+//            return false;
+//        }
+//    };
 
     private LinearLayout weightLayout;
     private ArrayList<EditText> weightNameViews = new ArrayList<>();
@@ -55,8 +55,8 @@ public class KimAddCourseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//        BottomNavigationView navigation = findViewById(R.id.navigation);
+//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -151,7 +151,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     }
                     kimCourse.id = nextId;
                     kimCourse.name = String.valueOf(nameView.getText());
-                    kimCourse.grade = "No Grade";
+                    kimCourse.grade = "0";
                     kimCourse.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
                     kimCourse.su = gradeSystemView.getSelectedItemPosition() != 0;
                     realm.copyToRealmOrUpdate(kimCourse);

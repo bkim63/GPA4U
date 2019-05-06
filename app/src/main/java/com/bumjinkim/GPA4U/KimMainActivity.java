@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,11 +22,13 @@ public class KimMainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_my_courses:
+                    setTitle(R.string.title_activity_kim_my_courses);
                     fragment = new KimMyCoursesFragment();
-                    return true;
+                    break;
                 case R.id.navigation_my_gpa:
+                    setTitle(R.string.title_activity_kim_my_gpa);
                     fragment = new KimMyGPAFragment();
-                    return true;
+                    break;
             }
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -38,17 +41,13 @@ public class KimMainActivity extends AppCompatActivity {
         }
     };
 
-    private int kim_settings_request_code = 5;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_kim_main);
 
-        setTitle(R.string.title_activity_kim_my_courses);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
@@ -65,9 +64,7 @@ public class KimMainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case 0:
                 Intent myIntent = new Intent(KimMainActivity.this, KimSettingsActivity.class);
-//                myIntent.putExtra("method", "add");
-//                myIntent.putExtra("course", getIntent().getExtras().getLong("course"));
-                startActivityForResult(myIntent, kim_settings_request_code);
+                startActivity(myIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
