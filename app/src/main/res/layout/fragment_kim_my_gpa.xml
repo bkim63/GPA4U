@@ -42,7 +42,7 @@
             android:id="@+id/bar_view"
             class="im.dacer.androidcharts.BarView"
             android:layout_width="wrap_content"
-            android:layout_height="300dp" />
+            android:layout_height="wrap_content" />
     </HorizontalScrollView>
 
     <TextView
