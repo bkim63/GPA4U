@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -122,6 +121,10 @@ public class KimAddCourseActivity extends AppCompatActivity {
                 }
 
                 if (weightSum < 100) {
+                    return;
+                }
+
+                if (TextUtils.isEmpty(nameView.getText())) {
                     return;
                 }
 

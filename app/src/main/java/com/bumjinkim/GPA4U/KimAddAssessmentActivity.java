@@ -109,7 +109,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     KimAssessment kimAssessment = null;
 
-                    if (TextUtils.isEmpty(gradeView.getText()) || TextUtils.isEmpty(weightView.getText())) {
+                    if (TextUtils.isEmpty(gradeView.getText()) || TextUtils.isEmpty(weightView.getText()) || TextUtils.isEmpty(nameView.getText())) {
                         return;
                     }
 

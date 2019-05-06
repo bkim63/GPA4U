@@ -22,7 +22,7 @@ public class KimMainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_my_courses:
                     fragment = new KimMyCoursesFragment();
-                return true;
+                    return true;
                 case R.id.navigation_my_gpa:
                     fragment = new KimMyGPAFragment();
                     return true;
