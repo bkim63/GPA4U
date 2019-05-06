@@ -1,11 +1,14 @@
 package com.bumjinkim.GPA4U;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -36,6 +39,7 @@ public class KimMyCoursesFragment extends Fragment {
     private int kim_add_course_request_code = 1;
 
     private RealmResults<KimAssessment> assessments;
+    private NotificationManager notificationManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -142,47 +146,126 @@ public class KimMyCoursesFragment extends Fragment {
 
     private void sendGPAPush(RealmResults<KimCourse> courses) {
         if (KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses)) < 3.00) {
-            Intent intent = new Intent(getContext(), KimMyCoursesFragment.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            int KIM_NOTIFICATION_ID = 0;
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
+            String id = getContext().getString(R.string.kim_notification_channel_id);
+            String title = getContext().getString(R.string.kim_notification_channel_title);
 
-            builder.setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.ic_launcher_background)
-                    .setTicker("GPA4U")
-                    .setContentTitle("GPA is low right now.")
-                    .setContentText("GPA is currently below 3.00. Study until hip gets ripped off.")
-                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                    .setContentIntent(contentIntent)
-                    .setContentInfo("Info");
+            Intent intent = null;
+            PendingIntent pendingIntent = null;
+            NotificationCompat.Builder builder = null;
 
-            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(1, builder.build());
+            if (notificationManager == null) {
+                notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel notificationChannel = notificationManager.getNotificationChannel(id);
+
+                if (notificationChannel == null) {
+                    notificationChannel = new NotificationChannel(id, title, NotificationManager.IMPORTANCE_DEFAULT);
+                    notificationChannel.enableVibration(true);
+                    notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+
+                    notificationManager.createNotificationChannel(notificationChannel);
+                }
+
+                builder = new NotificationCompat.Builder(getContext(), id);
+                intent = new Intent(getContext(), KimMainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+
+                builder.setContentTitle("Low GPA")
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentText(getContext().getString(R.string.app_name))
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setTicker("Low GPA. Study until chair ripped off.")
+                        .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            } else {
+                builder = new NotificationCompat.Builder(getContext(), id);
+                intent = new Intent(getContext(), KimMainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+
+                builder.setContentTitle("Low GPA")
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentText(getContext().getString(R.string.app_name))
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setTicker("Low GPA. Study until chair ripped off.")
+                        .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                        .setPriority(Notification.PRIORITY_HIGH);
+            }
+            Notification notification = builder.build();
+            notificationManager.notify(KIM_NOTIFICATION_ID, notification);
         }
     }
 
     private void sendExpectedGPAPush(RealmResults<KimCourse> courses) {
         if (KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<>(courses)) < 3.00) {
-            Intent intent = new Intent(getContext(), KimMyCoursesFragment.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 1000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            int KIM_NOTIFICATION_ID = 0;
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
+            String id = getContext().getString(R.string.kim_notification_channel_id);
+            String title = getContext().getString(R.string.kim_notification_channel_title);
 
-            builder.setAutoCancel(true)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.drawable.ic_launcher_background)
-                    .setTicker("GPA4U")
-                    .setContentTitle("Expected GPA is low right now.")
-                    .setContentText("Expected GPA is currently below 3.00. Study until hip gets ripped off.")
-                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                    .setContentIntent(contentIntent)
-                    .setContentInfo("Info");
+            Intent intent = null;
+            PendingIntent pendingIntent = null;
+            NotificationCompat.Builder builder = null;
 
-            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(1, builder.build());
+            if (notificationManager == null) {
+                notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                NotificationChannel notificationChannel = notificationManager.getNotificationChannel(id);
+
+                if (notificationChannel == null) {
+                    notificationChannel = new NotificationChannel(id, title, NotificationManager.IMPORTANCE_DEFAULT);
+                    notificationChannel.enableVibration(true);
+                    notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+
+                    notificationManager.createNotificationChannel(notificationChannel);
+                }
+
+                builder = new NotificationCompat.Builder(getContext(), id);
+
+                intent = new Intent(getContext(), KimMainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+
+                builder.setContentTitle("Low GPA")
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentText(getContext().getString(R.string.app_name))
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setTicker("Low Expected GPA. Study until chair ripped off.")
+                        .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            } else {
+                builder = new NotificationCompat.Builder(getContext(), id);
+                intent = new Intent(getContext(), KimMainActivity.class);
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
+
+                builder.setContentTitle("Low GPA")
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentText(getContext().getString(R.string.app_name))
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setTicker("Low Expected GPA. Study until chair ripped off.")
+                        .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                        .setPriority(Notification.PRIORITY_HIGH);
+            }
+
+            Notification notification = builder.build();
+            notificationManager.notify(KIM_NOTIFICATION_ID, notification);
         }
     }
 
