@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -54,10 +56,10 @@ public class KimAddCourseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        final Realm realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         weightLayout = findViewById(R.id.kim_add_class_weight);
         final TextView nameView = findViewById(R.id.kim_add_class_class_name);
@@ -101,18 +103,25 @@ public class KimAddCourseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 KimCourse kimCourse = null;
 
-                double weightSum = 0.0;
+                Realm realm = Realm.getDefaultInstance();
 
+                if (weightNameViews.size() == 0) {
+                    return;
+                }
+
+                double weightSum = 0.0;
                 for (int i = 0; i < weightNameViews.size(); i++) {
                     EditText weightPercentView = weightPercentViews.get(i);
                     if (TextUtils.isEmpty(weightPercentView.getText())) {
                         return;
                     }
-
                     weightSum += Double.valueOf(String.valueOf(weightPercentView.getText()));
                 }
-
                 if (weightSum > 100 || weightSum < 0) {
+                    return;
+                }
+
+                if (weightSum < 100) {
                     return;
                 }
 
@@ -190,6 +199,18 @@ public class KimAddCourseActivity extends AppCompatActivity {
     }
 
     private void createWeightEditText(KimWeight o) {
+        double weightTotal = 0.0;
+        for (EditText weightPercentView : weightPercentViews) {
+            if (TextUtils.isEmpty(weightPercentView.getText())) {
+                return;
+            }
+            weightTotal += Double.valueOf(String.valueOf(weightPercentView.getText()));
+        }
+
+        if (100 - weightTotal == 0) {
+            return;
+        }
+
         LinearLayout textViewLayout = new LinearLayout(KimAddCourseActivity.this);
         textViewLayout.setOrientation(HORIZONTAL);
 
@@ -215,7 +236,8 @@ public class KimAddCourseActivity extends AppCompatActivity {
         );
         textViewParams2.setMargins(0, 50, 50, 50);
         weightPercentView.setLayoutParams(textViewParams2);
-        weightPercentView.setHint("90");
+        weightPercentView.setHint(String.valueOf(100 - weightTotal));
+        weightPercentView.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         if (o != null) {
             weightPercentView.setText(String.valueOf(o.percent));

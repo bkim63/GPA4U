@@ -42,7 +42,6 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
                 context.startActivity(myIntent);
             }
         });
-        final Realm realm = Realm.getDefaultInstance();
         mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
@@ -62,14 +61,15 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
                                 ((FragmentActivity) context).startActivityForResult(editIntent, kim_add_course_request_code);
                                 break;
                             case 1:
+                                Realm realm = Realm.getDefaultInstance();
                                 realm.beginTransaction();
 
                                 final RealmResults<KimCourse> results = realm.where(KimCourse.class).equalTo("id", courses.get(recyclerView.getChildAdapterPosition(v)).id).findAll();
                                 results.deleteAllFromRealm();
 
                                 realm.commitTransaction();
-                                courses.remove(recyclerView.getChildAdapterPosition(v));
 
+                                courses.remove(recyclerView.getChildAdapterPosition(v));
                                 notifyDataSetChanged();
 
                                 break;

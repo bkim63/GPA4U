@@ -49,7 +49,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        final Realm realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         final TextView nameView = findViewById(R.id.kim_add_assessment_name);
         final TextView gradeView = findViewById(R.id.kim_add_assessment_grade);
@@ -116,6 +116,8 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                     if (Double.valueOf(String.valueOf(gradeView.getText())) > 100 || Double.valueOf(String.valueOf(gradeView.getText())) < 0 || Double.valueOf(String.valueOf(weightView.getText())) > 100 || Double.valueOf(String.valueOf(weightView.getText())) < 0) {
                         return;
                     }
+
+                    final Realm realm = Realm.getDefaultInstance();
 
                     if (method.equals("edit")) {
                         realm.beginTransaction();
