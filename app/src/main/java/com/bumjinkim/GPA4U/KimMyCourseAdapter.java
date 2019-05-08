@@ -71,8 +71,10 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
 
                                 realm.commitTransaction();
 
-                                courses.remove(recyclerView.getChildAdapterPosition(v));
-                                notifyDataSetChanged();
+                                KimPushNotification.sendPush(context);
+
+//                                courses.remove(recyclerView.getChildAdapterPosition(v));
+//                                notifyDataSetChanged();
 
                                 break;
                             default:
@@ -91,19 +93,16 @@ public class KimMyCourseAdapter extends RecyclerView.Adapter<KimMyCourseAdapter.
     @Override
     public void onBindViewHolder(@NonNull final CourseViewHolder courseViewHolder, final int i) {
         courseViewHolder.nameView.setText(courses.get(i).name);
-        Realm realm = Realm.getDefaultInstance();
-        final RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courses.get(i).id).findAll();
-        final RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", courses.get(i).id).findAll();
 
         if (courses.get(i).su) {
-            courseViewHolder.gradeView.setText(String.format("S/U Grade %s", KimCalculateGrade.calculateSUGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false))));
+            courseViewHolder.gradeView.setText(String.format("S/U Grade %s", KimCalculateGrade.calculateSUGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), true))));
         } else {
-            courseViewHolder.gradeView.setText(String.format("Letter Grade %s", KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false))));
+            courseViewHolder.gradeView.setText(String.format("Letter Grade %s", KimCalculateGrade.calculateCourseLetterGrade(KimCalculateGrade.calculateCourseGPA(courses.get(i), true))));
         }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean expected = preferences.getBoolean("show_credits", true);
-        if (expected) {
+        boolean showCredits = preferences.getBoolean("show_credits", true);
+        if (showCredits) {
             courseViewHolder.creditView.setVisibility(View.VISIBLE);
         } else {
             courseViewHolder.creditView.setVisibility(View.INVISIBLE);

@@ -66,6 +66,8 @@ public class KimMyAssessmentAdapter extends RecyclerView.Adapter<KimMyAssessment
                                 assessments.remove(recyclerView.getChildAdapterPosition(v));
                                 notifyDataSetChanged();
 
+                                KimPushNotification.sendPush(context);
+
                                 break;
                             default:
                                 break;

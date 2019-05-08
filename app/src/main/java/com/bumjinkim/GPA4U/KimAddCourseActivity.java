@@ -1,13 +1,11 @@
 package com.bumjinkim.GPA4U;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -70,7 +69,13 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
         KimCourse course = null;
 
-        final String method = getIntent().getExtras().getString("method");
+        final String method;
+        if (getIntent().getExtras() != null) {
+            method = getIntent().getExtras().getString("method");
+        } else {
+            method = "add";
+        }
+
         final long courseId = getIntent().getExtras().getLong("course");
 
         if (method.equals("edit")) {
@@ -81,12 +86,14 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
             course = courses.get(0);
 
-            nameView.setText(course.name);
-            creditView.setSelection(course.credit - 1);
-            gradeSystemView.setSelection(course.su ? 1 : 0);
+            if (course != null) {
+                nameView.setText(course.name);
+                creditView.setSelection(course.credit - 1);
+                gradeSystemView.setSelection(course.su ? 1 : 0);
 
-            for (KimWeight o : weights) {
-                createWeightEditText(o);
+                for (KimWeight o : weights) {
+                    createWeightEditText(o);
+                }
             }
 
         } else {
@@ -96,6 +103,7 @@ public class KimAddCourseActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.kim_add_course_save_button);
 
         final KimCourse finalCourse = course;
+        final AppCompatActivity finalActivity = this;
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,40 +112,57 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
                 Realm realm = Realm.getDefaultInstance();
 
+                if (TextUtils.getTrimmedLength(nameView.getText()) == 0) {
+                    Toast.makeText(finalActivity, "You have not entered course name.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if (weightNameViews.size() == 0) {
+                    Toast.makeText(finalActivity, "You have not entered any weights.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 double weightSum = 0.0;
+
                 for (int i = 0; i < weightNameViews.size(); i++) {
-                    EditText weightPercentView = weightPercentViews.get(i);
-                    if (TextUtils.isEmpty(weightPercentView.getText())) {
+                    if (TextUtils.getTrimmedLength(weightNameViews.get(i).getText()) == 0) {
+                        Toast.makeText(finalActivity, "You have not entered weight name.", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    weightSum += Double.valueOf(String.valueOf(weightPercentView.getText()));
+                    if (TextUtils.getTrimmedLength(weightPercentViews.get(i).getText()) == 0) {
+                        Toast.makeText(finalActivity, "You have not entered weight percent.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    weightSum += Double.valueOf(String.valueOf(weightPercentViews.get(i).getText()));
                 }
+
                 if (weightSum > 100 || weightSum < 0) {
+                    Toast.makeText(finalActivity, "Weight is over 100 or less than 0.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 if (weightSum < 100) {
+                    Toast.makeText(finalActivity, "Sum of all weights must be 100.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                if (TextUtils.isEmpty(nameView.getText())) {
+                if (TextUtils.getTrimmedLength(nameView.getText()) == 0) {
+                    Toast.makeText(finalActivity, "You have not entered weight name.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 if (method.equals("edit")) {
-                    realm.beginTransaction();
+                    if (finalCourse != null) {
+                        realm.beginTransaction();
 
-                    finalCourse.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
-                    finalCourse.name = String.valueOf(nameView.getText());
-                    finalCourse.su = gradeSystemView.getSelectedItemPosition() != 0;
-                    kimCourse = finalCourse;
+                        finalCourse.credit = Integer.valueOf(String.valueOf(creditView.getSelectedItem()));
+                        finalCourse.name = String.valueOf(nameView.getText());
+                        finalCourse.su = gradeSystemView.getSelectedItemPosition() != 0;
+                        kimCourse = finalCourse;
 
-                    realm.copyToRealmOrUpdate(finalCourse);
-                    realm.commitTransaction();
+                        realm.copyToRealmOrUpdate(finalCourse);
+                        realm.commitTransaction();
+                    }
                 } else {
                     realm.beginTransaction();
 
@@ -187,6 +212,8 @@ public class KimAddCourseActivity extends AppCompatActivity {
                     realm.commitTransaction();
                 }
 
+                KimPushNotification.sendPush(KimAddCourseActivity.this);
+
                 setResult(RESULT_OK);
                 finish();
             }
@@ -203,14 +230,20 @@ public class KimAddCourseActivity extends AppCompatActivity {
 
     private void createWeightEditText(KimWeight o) {
         double weightTotal = 0.0;
-        for (EditText weightPercentView : weightPercentViews) {
-            if (TextUtils.isEmpty(weightPercentView.getText())) {
+        for (int i = 0; i < weightPercentViews.size(); i++ ) {
+            if (TextUtils.getTrimmedLength(weightPercentViews.get(i).getText()) == 0) {
+                Toast.makeText(this, "Weight percent is empty.", Toast.LENGTH_LONG).show();
                 return;
             }
-            weightTotal += Double.valueOf(String.valueOf(weightPercentView.getText()));
+            if (TextUtils.getTrimmedLength(weightNameViews.get(i).getText()) == 0) {
+                Toast.makeText(this, "Weight name are empty.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            weightTotal += Double.valueOf(String.valueOf(weightPercentViews.get(i).getText()));
         }
 
-        if (100 - weightTotal == 0) {
+        if (weightTotal >= 100) {
+            Toast.makeText(this, "Weight is already equal to and over 100.", Toast.LENGTH_LONG).show();
             return;
         }
 

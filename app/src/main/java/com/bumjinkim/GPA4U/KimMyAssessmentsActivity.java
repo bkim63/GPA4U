@@ -33,7 +33,7 @@ public class KimMyAssessmentsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        FloatingActionButton fab = findViewById(R.id.kim_add_course_button);
+        FloatingActionButton fab = findViewById(R.id.kim_add_assessment_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

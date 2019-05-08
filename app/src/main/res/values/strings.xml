@@ -83,8 +83,8 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="kim_notification_channel_id">gpa4u</string>
-    <string name="kim_notification_channel_title">gpa</string>
+    <string name="kim_notification_channel_id">99999999</string>
+    <string name="kim_notification_channel_title">GPA</string>
     <string name="title_activity_kim_my_gpa">My GPA</string>
 
 </resources>

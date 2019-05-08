@@ -3,17 +3,16 @@ package com.bumjinkim.GPA4U;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -68,8 +67,15 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
 
         KimAssessment assessment = null;
 
-        final String method = getIntent().getExtras().getString("method", "add");
-        final Long courseId = getIntent().getExtras().getLong("course");
+        final String method;
+        long courseId;
+
+        if (getIntent().getExtras() != null) {
+            method = getIntent().getExtras().getString("method", "add");
+        } else {
+            method = "add";
+        }
+        courseId = getIntent().getExtras().getLong("course");
 
         final RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", courseId).findAll();
         final RealmResults<KimCourse> courses = realm.where(KimCourse.class).equalTo("id", getIntent().getExtras().getLong("course")).findAll();
@@ -81,7 +87,7 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             spinnerItems.add(weight.name);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, spinnerItems);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -94,17 +100,21 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             final RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("id", getIntent().getExtras().getLong("assessment")).findAll();
             assessment = assessments.get(0);
 
-            for (int i = 0; i < weights.size(); i++) {
-                if (assessment.weight.id.equals(weights.get(i).id)) {
-                    spinner.setSelection(i);
+            if (assessment != null) {
+                for (int i = 0; i < weights.size(); i++) {
+                    if (weights.get(i) != null) {
+                        if (assessment.weight.id.equals(weights.get(i).id)) {
+                            spinner.setSelection(i);
+                        }
+                    }
                 }
+
+                Log.d("Expected Checkbox: ", String.valueOf(assessment.expected));
+                nameView.setText(assessment.name);
+                gradeView.setText(String.valueOf(assessment.grade));
+                expectedView.setChecked(assessment.expected);
+                weightView.setText(String.valueOf(assessment.assessmentWeight));
             }
-
-            nameView.setText(assessment.name);
-            gradeView.setText(String.valueOf(assessment.grade));
-            expectedView.setSelected(assessment.expected);
-            weightView.setText(String.valueOf(assessment.assessmentWeight));
-
         } else {
             setTitle("Add Assessment");
         }
@@ -113,33 +123,48 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
             Button saveButton = findViewById(R.id.kim_add_assessment_save_button);
 
             final KimAssessment savedAssessment = assessment;
+            final AppCompatActivity finalActivity = this;
 
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    KimAssessment kimAssessment = null;
+                    KimAssessment kimAssessment;
 
-                    if (TextUtils.isEmpty(gradeView.getText()) || TextUtils.isEmpty(weightView.getText()) || TextUtils.isEmpty(nameView.getText())) {
+                    if (TextUtils.getTrimmedLength(gradeView.getText()) == 0) {
+                        Toast.makeText(finalActivity, "Please fill in percent mark.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (TextUtils.getTrimmedLength(weightView.getText()) == 0) {
+                        Toast.makeText(finalActivity, "Please fill in assessment weight.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (TextUtils.getTrimmedLength(nameView.getText()) == 0) {
+                        Toast.makeText(finalActivity, "Please fill in assessment name.", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (Double.valueOf(String.valueOf(gradeView.getText())) > 100 || Double.valueOf(String.valueOf(gradeView.getText())) < 0 || Double.valueOf(String.valueOf(weightView.getText())) > 100 || Double.valueOf(String.valueOf(weightView.getText())) < 0) {
+                        Toast.makeText(finalActivity, "Grade/Weight is less than 0 or equal to 100.", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     final Realm realm = Realm.getDefaultInstance();
 
                     if (method.equals("edit")) {
-                        realm.beginTransaction();
+                        if (savedAssessment != null) {
+                            realm.beginTransaction();
 
-                        savedAssessment.grade = Double.valueOf(String.valueOf(gradeView.getText()));
-                        savedAssessment.name = String.valueOf(nameView.getText());
-                        savedAssessment.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
-                        savedAssessment.expected = expectedView.isSelected();
-                        savedAssessment.weight = weights.get(spinner.getSelectedItemPosition());
+                            savedAssessment.grade = Double.valueOf(String.valueOf(gradeView.getText()));
+                            savedAssessment.name = String.valueOf(nameView.getText());
+                            savedAssessment.assessmentWeight = Double.valueOf(String.valueOf(weightView.getText()));
+                            savedAssessment.expected = expectedView.isChecked();
+                            savedAssessment.weight = weights.get(spinner.getSelectedItemPosition());
 
-                        realm.copyToRealmOrUpdate(savedAssessment);
-                        realm.commitTransaction();
+                            realm.copyToRealmOrUpdate(savedAssessment);
+                            realm.commitTransaction();
+                        }
                     } else {
                         realm.beginTransaction();
 
@@ -164,6 +189,8 @@ public class KimAddAssessmentActivity extends AppCompatActivity {
                         realm.copyToRealmOrUpdate(kimAssessment);
                         realm.commitTransaction();
                     }
+
+                    KimPushNotification.sendPush(KimAddAssessmentActivity.this);
 
                     setResult(RESULT_OK);
                     finish();

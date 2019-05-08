@@ -13,17 +13,13 @@ public class KimCalculateGrade {
         double totalCredit = 0.0;
         for (KimCourse course : courses) {
             if (!course.su) {
-                totalCredit += ((KimCourse) course).credit;
+                totalCredit += course.credit;
             }
         }
 
-        Realm realm = Realm.getDefaultInstance();
         for (KimCourse course : courses) {
             if (!course.su) {
-                RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
-                RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
-
-                grade += calculateGPAFromGrade(calculateCourseGPA(course, new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), false)) * ((KimCourse) course).credit / totalCredit;
+                grade += calculateGPAFromGrade(calculateCourseGPA(course, false)) * course.credit / totalCredit;
                 Log.d("GPA", String.valueOf(grade));
             }
         }
@@ -44,17 +40,13 @@ public class KimCalculateGrade {
         double totalCredit = 0.0;
         for (KimCourse course : courses) {
             if (!course.su) {
-                totalCredit += ((KimCourse) course).credit;
+                totalCredit += course.credit;
             }
         }
 
-        Realm realm = Realm.getDefaultInstance();
         for (KimCourse course : courses) {
             if (!course.su) {
-                RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
-                RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
-
-                grade += calculateGPAFromGrade(calculateCourseGPA(course, new ArrayList<KimWeight>(weights), new ArrayList<KimAssessment>(assessments), true)) * ((KimCourse) course).credit / totalCredit;
+                grade += calculateGPAFromGrade(calculateCourseGPA(course, true)) * course.credit / totalCredit;
                 Log.d("GPA", String.valueOf(grade));
             }
         }
@@ -62,8 +54,13 @@ public class KimCalculateGrade {
         return grade;
     }
 
-    public static double calculateCourseGPA(KimCourse course, ArrayList<KimWeight> weights, ArrayList<KimAssessment> assessments, boolean expected) {
+    public static double calculateCourseGPA(KimCourse course, boolean expected) {
         double grade = 0.0;
+
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<KimWeight> weights = realm.where(KimWeight.class).equalTo("course.id", course.id).findAll();
+        RealmResults<KimAssessment> assessments = realm.where(KimAssessment.class).equalTo("course.id", course.id).findAll();
 
         for (int i = 0; i < weights.size(); i++) {
             double tempGrade = 0.0;
@@ -75,15 +72,21 @@ public class KimCalculateGrade {
             for (KimAssessment a : assessments) {
                 if (!expected) {
                     if (!a.expected) {
-                        assessmentWeightTotal+= a.assessmentWeight;
+                        assessmentWeightTotal += a.assessmentWeight;
                     }
                 } else {
-                    assessmentWeightTotal+= a.assessmentWeight;
+                    assessmentWeightTotal += a.assessmentWeight;
                 }
             }
 
             for (KimAssessment a : assessments) {
-                tempGrade += a.grade * a.assessmentWeight / assessmentWeightTotal;
+                if (!expected) {
+                    if (!a.expected) {
+                        tempGrade += a.grade * a.assessmentWeight / assessmentWeightTotal;
+                    }
+                } else {
+                    tempGrade += a.grade * a.assessmentWeight / assessmentWeightTotal;
+                }
             }
 
             Log.d("GRADE CALCULATION", String.valueOf(tempGrade));
@@ -163,7 +166,7 @@ public class KimCalculateGrade {
         } else if (grade <= 59.5 && grade >= 0) {
             letterGrade = "F";
         } else {
-            letterGrade = "No Grade";
+            letterGrade = "F";
         }
 
         return letterGrade;
