@@ -5,7 +5,7 @@ Username & Password
 ----------
 Not needed
 
-Sprint 1 - Details of what features have been completed so far & General state of the app 
+Sprint 2 - Details of what features have been completed so far & General state of the app 
 ------------------------------------------------------------------------------
 All features of Sprint 2 have been completed which are GPA pie chart & bar charts in MyGPA screen, showing/hiding expected GPA with switch in Settings screen, credits switch showing/hiding credits shown in MyCourses screen, push notifications switch to receive notification when receiving below 3.00 GPA, switch for disabling all push notifications, switch for receiving notification when receiving below 3.00 expected GPA, push notification popping up after adding and editing assessments only if GPA or expected GPA is below 3.00. If both GPA and expected GPA are below 3.00, two push notifications pop up consecutively.
 editing courses & assignments, Letter or S/U grading system, specifying course credits, S/U grading system doesn't affect overall GPA, deleting courses & assignments. I also fixed all the bugs that TA told me after Sprint 1.
