@@ -12,7 +12,7 @@ editing courses & assignments, Letter or S/U grading system, specifying course c
 
 General state of the app is that when a person's GPA or expected changes, push notifications pop up consecutively for each GPA and expected GPA. Also, MyGPA screen shows pie chart and bar chart showing current courses with grades. MyScreen shows switches for disabling/enabling push notifications and hiding/showing expected GPA and expected GPA checkbox in MyAssessment screen.
 
-I implemented MyGPA and Settings. MyGPA has pie chart and bar chart showing course names and grades for each in different random color. Those grades in MyGPA screen include expected grades. 
+I implemented MyGPA and Settings. MyGPA has pie chart and bar chart showing course names and grades for each in different random color. I also implemented so that those grades in MyGPA screen include expected grades. I implemented push notifications to pop up when GPA or expected GPA is below 3.00 after adding or editing assessments or courses. I implemented so that both push notifications (GPA and expected GPA) pop up one seconds after another.
 
 ## Sprint 2 Completed Features Listed Below
 - My GPA
@@ -34,6 +34,7 @@ I implemented MyGPA and Settings. MyGPA has pie chart and bar chart showing cour
 Professor told me not to include brief plain text meeting notes for each stand-up meeting in my repo
 ----------------------------------------------------------------------------------------
 Dr.Selinski told me not to include it.
+
 
 Sprint 1 - Details of what features have been completed so far & General state of the app 
 ------------------------------------------------------------------------------
