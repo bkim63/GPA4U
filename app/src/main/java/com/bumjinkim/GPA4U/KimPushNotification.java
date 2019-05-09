@@ -104,7 +104,7 @@ public class KimPushNotification {
                 pendingIntent = PendingIntent.getActivity(context, KIM_NOTIFICATION_ID, intent, PendingIntent.FLAG_ONE_SHOT);
 
                 builder.setContentTitle("Low GPA")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentText("Low GPA. Study until chair ripped off.")
                         .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
                         .setAutoCancel(false)
@@ -121,7 +121,7 @@ public class KimPushNotification {
 
                 builder.setContentTitle("Low GPA")
                         .setContentText("Low GPA. Study until chair ripped off.")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
                         .setAutoCancel(false)
                         .setContentIntent(pendingIntent)
@@ -166,7 +166,7 @@ public class KimPushNotification {
                 pendingIntent = PendingIntent.getActivity(context, KIM_NOTIFICATION_ID, intent, PendingIntent.FLAG_ONE_SHOT);
 
                 builder.setContentTitle("Low Expected GPA")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentText("Low Expected GPA. Study until chair ripped off.")
                         .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
                         .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -182,7 +182,7 @@ public class KimPushNotification {
                 pendingIntent = PendingIntent.getActivity(context, KIM_NOTIFICATION_ID, intent, PendingIntent.FLAG_ONE_SHOT);
 
                 builder.setContentTitle("Low Expected GPA")
-                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
                         .setAutoCancel(false)
                         .setContentIntent(pendingIntent)
