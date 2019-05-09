@@ -1,5 +1,6 @@
 package com.bumjinkim.GPA4U;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,6 +35,13 @@ public class KimMyCoursesFragment extends Fragment {
     private TextView expectedGPAView;
     private FloatingActionButton fab;
     private RealmResults<KimCourse> courses;
+    private Context context;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,7 +71,7 @@ public class KimMyCoursesFragment extends Fragment {
         gpaView.setText(String.format("GPA %.2f", KimCalculateGrade.calculateOverallGPA(new ArrayList<>(courses))));
         expectedGPAView.setText(String.format("Expected GPA %.2f", KimCalculateGrade.calculateOverallExpectedGPA(new ArrayList<>(courses))));
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         boolean showExpectedGPA = preferences.getBoolean("show_expected_gpa", true);
         if (showExpectedGPA) {
             expectedGPAView.setVisibility(View.VISIBLE);
@@ -75,7 +83,7 @@ public class KimMyCoursesFragment extends Fragment {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 Log.d("SharedPreferences", key);
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimMyCoursesFragment.this.getContext());
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean showExpected = preferences.getBoolean("show_expected_gpa", true);
                 if (showExpected) {
                     expectedGPAView.setVisibility(View.VISIBLE);
@@ -126,7 +134,7 @@ public class KimMyCoursesFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KimMyCoursesFragment.this.getContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         boolean showExpected = preferences.getBoolean("show_expected_gpa", true);
         if (showExpected) {
             expectedGPAView.setVisibility(View.VISIBLE);
