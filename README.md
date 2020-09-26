@@ -1,11 +1,10 @@
 # GPA4U
-Team O
 
 Username & Password
 ----------
 Not needed
 
-Sprint 2 - Details of what features have been completed so far & General state of the app 
+Details of features completed & General state of the app 
 ------------------------------------------------------------------------------
 All features of Sprint 2 have been completed which are GPA pie chart & bar charts in MyGPA screen, showing/hiding expected GPA with switch in Settings screen, credits switch showing/hiding credits shown in MyCourses screen, push notifications switch to receive notification when receiving below 3.00 GPA, switch for disabling all push notifications, switch for receiving notification when receiving below 3.00 expected GPA, push notification popping up after adding and editing assessments only if GPA or expected GPA is below 3.00. If both GPA and expected GPA are below 3.00, two push notifications pop up consecutively.
 editing courses & assignments, Letter or S/U grading system, specifying course credits, S/U grading system doesn't affect overall GPA, deleting courses & assignments. I also fixed all the bugs that TA told me after Sprint 1.
@@ -14,7 +13,7 @@ General state of the app is that when a person's GPA or expected changes, push n
 
 I implemented MyGPA and Settings. MyGPA has pie chart and bar chart showing course names and grades for each in different random color. I also implemented so that those grades in MyGPA screen include expected grades. I implemented push notifications to pop up when GPA or expected GPA is below 3.00 after adding or editing assessments or courses. I implemented so that both push notifications (GPA and expected GPA) pop up one seconds after another.
 
-## Sprint 2 Completed Features Listed Below
+## Completed Features
 - My GPA
   - Statistics graph to show current GPA
 - Settings
@@ -31,12 +30,7 @@ I implemented MyGPA and Settings. MyGPA has pie chart and bar chart showing cour
 - Bug Fixes
   - Fixed all the bugs that TA told me in `AddCourse and AddAssessment screens`
 
-Professor told me not to include brief plain text meeting notes for each stand-up meeting in my repo
-----------------------------------------------------------------------------------------
-Dr.Selinski told me not to include it.
-
-
-Sprint 1 - Details of what features have been completed so far & General state of the app 
+Details of features completed & General state of the app 
 ------------------------------------------------------------------------------
 All features of Sprint 1 have been completed including auto calculating GPA, expected GPA, adding courses & assignments,
 editing courses & assignments, Letter or S/U grading system, specifying course credits, S/U grading system doesn't affect overall GPA, deleting courses & assignments. 
@@ -45,7 +39,7 @@ General state of the app is that the app is able to add, edit, delete course and
 
 I implemented My Course, My Assessment, Add Assessment, and Add Course activities. I put the course, weight, and assessment information into local database and load them when app starts. I also implemented Overall GPA and Overall Expected GPA. Courses with S/U grading system do not affect Overall GPA and Overall Expected GPA. Those courses will only show S or U instead of a letter grade. Multiple weights on a single course will show those weight names on Add Assessment activity.
 
-## Sprint 1 Completed Features Listed Below
+## Completed Features 
 - My Courses
   - MyCourse Activity
   - floating button to show Add Course activity
@@ -64,7 +58,3 @@ I implemented My Course, My Assessment, Add Assessment, and Add Course activitie
   - Drop downs for assessment type
   - Drop down for expected grade for assessment
   - Back button for app bar.
-
-Professor told me not to include brief plain text meeting notes for each stand-up meeting in my repo
-----------------------------------------------------------------------------------------
-Dr.Selinski told me not to include it.
