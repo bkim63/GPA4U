@@ -1,13 +1,9 @@
 # GPA4U
 
-Username & Password
-----------
-Not needed
-
 Details of features completed & General state of the app 
 ------------------------------------------------------------------------------
 All features of Sprint 2 have been completed which are GPA pie chart & bar charts in MyGPA screen, showing/hiding expected GPA with switch in Settings screen, credits switch showing/hiding credits shown in MyCourses screen, push notifications switch to receive notification when receiving below 3.00 GPA, switch for disabling all push notifications, switch for receiving notification when receiving below 3.00 expected GPA, push notification popping up after adding and editing assessments only if GPA or expected GPA is below 3.00. If both GPA and expected GPA are below 3.00, two push notifications pop up consecutively.
-editing courses & assignments, Letter or S/U grading system, specifying course credits, S/U grading system doesn't affect overall GPA, deleting courses & assignments. I also fixed all the bugs that TA told me after Sprint 1.
+editing courses & assignments, Letter or S/U grading system, specifying course credits, S/U grading system doesn't affect overall GPA, deleting courses & assignments.
 
 General state of the app is that when a person's GPA or expected changes, push notifications pop up consecutively for each GPA and expected GPA. Also, MyGPA screen shows pie chart and bar chart showing current courses with grades. MyScreen shows switches for disabling/enabling push notifications and hiding/showing expected GPA and expected GPA checkbox in MyAssessment screen.
 
@@ -27,8 +23,7 @@ I implemented MyGPA and Settings. MyGPA has pie chart and bar chart showing cour
 - Push Notifications
   - When GPA is below 3.00, push notification pops up after `adding and editing assessments`.
   - When expected GPA is below 3.00, push notification pops up after `adding and editing assessments` seconds after GPA notification pops up.
-- Bug Fixes
-  - Fixed all the bugs that TA told me in `AddCourse and AddAssessment screens`
+  
 
 Details of features completed & General state of the app 
 ------------------------------------------------------------------------------
